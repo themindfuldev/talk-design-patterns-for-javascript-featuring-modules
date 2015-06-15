@@ -1,0 +1,7 @@
+{
+  "title": "Design patterns for JavaScript",
+  "description": "This talk explains some pitfalls, solutions and good practices for common scenarios in Backbone.js.",
+  "author": "Tiago Garcia",
+  "site": "http://tiagorg.com",
+  "date": "Feb 5th, 2015"
+}
