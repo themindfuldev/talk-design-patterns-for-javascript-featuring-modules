@@ -1,7 +1,7 @@
 {
   "title": "Design patterns for JavaScript",
-  "description": "This talk explains some pitfalls, solutions and good practices for common scenarios in Backbone.js.",
+  "description": "This talk will introduce fundamental design patterns for JavaScript and explain different JavaScript Module strategies such as ad hoc, CommonJS, AMD and ES6 modules.",
   "author": "Tiago Garcia",
   "site": "http://tiagorg.com",
-  "date": "Feb 5th, 2015"
+  "date": "July 21st, 2015"
 }

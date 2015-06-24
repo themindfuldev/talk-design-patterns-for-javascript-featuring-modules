@@ -7,12 +7,10 @@ You should just edit the source file at src/README.md - the one which stars with
 -->
 
 ## @@title
-
-Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [Addy Osmani](https://twitter.com/addyosmani)
-
+### Featuring Modules
 <br/><br/><br/><br/>
 
-[@@author](https://twitter.com/tiagooo_romero) @ [Mobile+Web DevCon](http://mobilewebdevconference.com/)
+[@@author](https://twitter.com/tiagooo_romero) @ [DevCon5](http://www.html5report.com/conference/newyork/)
 
 *@@site*
 
@@ -27,7 +25,7 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 - Tech Manager at [Avenue Code](http://www.avenuecode.com) 
 - Tech Lead at [Macys.com](http://www.macys.com).
 - Organizer of the [Backbone.js Hackers meetup in SF](http://www.meetup.com/Backbone-js-Hackers).
-
+- Has spoken on [HTML5DevConf 2014](http://html5devconf.com/speakers/tiago_romerogarcia.html).
 
 ---
 
@@ -37,21 +35,12 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 - JavaScript Design Patterns
     - Constructor
     - Module
+      - CommonJS
+      - AMD
+      - ES6
     - Fa&ccedil;ade
     - Observer aka Custom Event
     - Mediator aka Pub-Sub
-- Large-Scale JavaScript
-    - Proposed architecture
-    - Applying patterns  
-
----
-
-## Prerequisites
-
-- Intermediate JavaScript
-- Advanced OOP
-- Familiarity with Design Patterns
-- Curiosity
 
 ---
 
@@ -59,8 +48,8 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 
 - Pattern: 
     - Proven *solution* to a certain class of *problems* in a specific *context*.
-    - Pre-conditions (requirements).
-    - Post-conditions (consequences). 
+    - Pre-conditions -> requirements.
+    - Post-conditions -> consequences. 
 - Pattern *language*: a common vocabulary.
     - *Network* of connected patterns -> reuse.
 
@@ -69,10 +58,10 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 ## Design Patterns
 
 - Design Patterns address common OOP problems.
-- 1994: *Gang Of Four* publishes [Design Patterns](http://www.amazon.com/Design-Patterns-Object-Oriented-Professional-Computing/dp/0201634988), a truly watershed in the history of OOP and the debut of the term.
+- 1994: *Gang Of Four* publishes [Design Patterns](http://www.amazon.com/Design-Patterns-Object-Oriented-Professional-Computing/dp/0201634988), a big watershed in the history of OOP and the debut of the term.
    - Features 23 classic design patterns, categorized in *creational*, *structural* and *behavioral*.
    - Many people believe that "Design Patterns" term is exclusive to those 23 patterns, which is not the case.
-- Back in 1994, programming languages and frameworks native support to Design Patterns was rough.
+- Back in 1994, programming languages' native support to Design Patterns was hazy.
 - Nowadays, many of those patterns have been incorporated into programming languages and frameworks.
 
 ----
@@ -85,12 +74,16 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 
 ## JS Design Patterns
 
-- JS code is more complex today than ever before, as we are bringing the desktop experience to the web, abusing of events, ASYNC, SPA, unit testing, etc.
+- JS code is more complex today than ever before.
+   - Dazzling experience & interaction
+   - ASYNC (AJAX/AJAJ) & Callbacks / Promises
+   - Single Page Applications
 - Good reasons to use Design Patterns in JS:
-   - Avoid "spaghetti code" (hard to read and maintain for the lack of structure).
-   - Improve overall maintainability, making it clear to identify where to change the code.
-   - Enable more objective unit tests.
-- Today we are covering some Design Patterns for Large-scale JS applications.
+   - Avoid "spaghetti code" (unstructured and hard to read).
+   - Better overall maintainability, making it clear where to change the code.
+   - Far more objective unit tests.
+- Today we are covering some of the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [Addy Osmani](https://twitter.com/addyosmani).
+
 
 ---
 
@@ -105,7 +98,7 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
   // ES5 Object.create method from prototype
   var myDog = Object.create(Dog.prototype);
  
-  // constructor call (uses this to set properties)
+  // constructor call
   var myDog = new Dog();
 ```
 
@@ -115,7 +108,7 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 
 - *new* must be used before invoking.
 - *this* references the new object being created.
-- Doesn't return anything.
+- Returns a the new instance, no need for *return* as in a function.
 ```javascript
   function Dog(name, breed) {
     this.name = name;
@@ -133,8 +126,8 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 
 ## Prototype
 
-- Defining functions in the constructor is not ideal, as the function will be redefined for each new instance.
-- Using the *prototype*, all instances can share functions.
+- Defining functions in the constructor is not ideal, as a new function will be defined for each new instance.
+- By writing on the function's *prototype*, all instances can share functions and attributes.
 ```javascript
   function Dog(name, breed) {
     this.name = name;
@@ -142,9 +135,8 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
   }
     
   Dog.prototype.bark = function() {
-      return this.name + ': woof, woof!';
-    };
-  }
+    return this.name + ': woof, woof!';
+  };
    
   var myDog = new Dog('Sherlock', 'beagle');
   console.log(myDog.bark());
@@ -154,11 +146,11 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 
 ## Module
 
-- Emulates classic OO classes to support public/private methods and variables inside a single object.
-- Encapsulation achieved through closures.
+- Applies classic OO ideas for building reusable components by supporting  private/public functions and attributes in objects.
+- Encapsulation achieved through *closures* -> function scope.
 ```javascript
-  var myDog = (function(name, breed) {
-    var getBarkStyle = function() {
+  var myDog = (function(name, breed) { // IIFE
+    function getBarkStyle() {
       return (breed === 'husky')? 'woooooow!': 'woof, woof!';
     }; 
 
@@ -197,9 +189,9 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 
 ----
 
-## Module
+## Module Standards
 
-- Highly enforced by JS community.
+- Standards
 - First-class citizen in *CommonJS* and *AMD*.
 ```javascript
   // CommonJS syntax
@@ -225,7 +217,7 @@ Based on the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [
 
 - Provides a convenient higher-level interface to a component, hiding its complexity and simplifying the API.
 ```javascript
-  // Pure JS
+  // Vanilla JS
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'http://code.jquery.com/jquery-latest.js', true);
   xhr.onreadystatechange = function() {
@@ -422,118 +414,7 @@ var factorialFacade = (function() {
 
 ---
 
-## Large-scale Javascript
 
-- Large-scale is not about LOC or app size.
-- Large-scale is about the architectural support for growing in size while not growing in complexity.
-- To make this possible we need:
-    - cohesive modules
-    - low coupling between modules
-    - module independency
-    - module replaceability
-    - module security
-    - some infrastructure to control the modules
-
----
-
-## Proposed Architecture
-
-- Employing patterns Module, Fa&ccedil;ade and Mediator:
-    - *Module* to encapsulate components / features.
-    - *Fa&ccedil;ade* to create a secure sandbox around the Modules.
-    - *Mediator* to orchestrate the Modules in terms of:
-        - publish and subscribe
-        - lifecycle (add, remove, start, stop)
-        - delivering messages
-- A Module can publisher, subscriber or both.
-
----
-
-## Applying patterns
-
-```javascript
-  var NewEmailModule = function(from) {
-    return {
-      newEmail: function(email) {
-        email.from = from;
-        this.publish('email', { email : email });
-      }
-    };
-  };
-    
-  var myNewEmail = NewEmailModule('tgarcia@avenuecode.com');
-  mediator.installTo(myNewEmail);
-```
-
-----
-
-## Applying patterns
-
-```javascript
-  var MailboxModule = function(owner, channel) {
-    var emails = [];
-      
-    return {
-      receiveEmail: function(message) {
-        if (message.email.to === owner) {
-          emails.push(message.email);
-          this.publish(channel, { owner: owner, emails: emails });
-        }
-      }
-    };
-  };
-    
-  var myMailbox = MailboxModule('tgarcia@avenuecode.com', 'my-mailbox');
-  mediator.installTo(myMailbox);
-  mediator.subscribe('email', myMailbox.receiveEmail);
-```
-
-----
-
-## Applying patterns
-
-```javascript
-  var RenderMailboxModule = function(selector) {
-    var el = $(selector);
-      
-    return {
-      render: function(message) {
-        var frag = $(document.createDocumentFragment());
-        $.each(message.emails, function(index, email) {
-          frag.append('<h3>[' + index + '] ' + email.subject + '</h3>')
-              .append('<h4>From: ' + email.from + '</h4>')
-              .append('<p>' + email.content + '</p>');
-        });
-        el.html(frag);
-      }
-    };
-  };
-
-  var myRenderMailbox = RenderMailboxModule('#my-mailbox');
-  mediator.subscribe('my-mailbox', myRenderMailbox.render);
-```
-
-----
-
-## Applying patterns
-
-- This is the event triggering:
-```javascript
-  $('button').click(function(e) {
-      e.preventDefault();
-      var email = {
-        to: $('input[name=to]').val(),
-        subject: $('input[name=subject]').val(),
-        content: $('textarea[name=content]').val()
-      };
-      myNewEmail.newEmail(email);
-    });
-  });
-```
-- Notice how a module doesn't know about other modules.
-
-<br/>
-[See it live on Plunker!](http://plnkr.co/edit/UVB6IIawq5YySC1T5c3f?p=preview)
 
 ---
 
@@ -550,17 +431,4 @@ var factorialFacade = (function() {
 
 - [Javascript Patterns - Stoyan Stefanov](http://shop.oreilly.com/product/9780596806767.do)
 - [Learning JavaScript Design Patterns - Addy Osmani](http://addyosmani.com/resources/essentialjsdesignpatterns)
-- [Patterns for Large-Scale JavaScript Application Architecture - Addy Osmani](http://addyosmani.com/largescalejavascript)
-- [AuraJS](http://aurajs.com)
-
----
-
-## Challenge
-
-*Write a large-scale client-side app using design patterns.*
-
-- For Backbone.js devs:
-    1. Fork my quiz app from https://github.com/tiagorg/quiz-app
-    1. Read the instructions on [README.md](https://github.com/tiagorg/quiz-app#refactor-to-design-patterns-for-large-scale-js)
-    1. Send me your GitHub repo with the solution.
-- Alternatively, write your application from scratch.
+- [The mind-boggling universe of JavaScript Module strategies](https://www.airpair.com/javascript/posts/the-mind-boggling-universe-of-javascript-modules)
