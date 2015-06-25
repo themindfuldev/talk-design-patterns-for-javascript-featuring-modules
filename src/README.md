@@ -34,11 +34,11 @@ You should just edit the source file at src/README.md - the one which stars with
 - Patterns and Design Patterns
 - JavaScript Design Patterns
     - Constructor
+    - Fa&ccedil;ade
     - Module
       - CommonJS
       - AMD
       - ES6
-    - Fa&ccedil;ade
     - Observer aka Custom Event
     - Mediator aka Pub-Sub
 
@@ -92,14 +92,14 @@ You should just edit the source file at src/README.md - the one which stars with
 - A special method used to initialize a newly created object once memory has been allocated.
 - JS is indeed OO but it differs from classic OO, and there are different ways to construct an object:
 ```javascript
-  // object literal a.k.a. Singleton
-  var myDog = {};
+// object literal a.k.a. Singleton
+var myDog = {};
  
-  // ES5 Object.create method from prototype
-  var myDog = Object.create(Dog.prototype);
+// ES5 Object.create method from prototype
+var myDog = Object.create(Dog.prototype);
  
-  // constructor call
-  var myDog = new Dog();
+// constructor call
+var myDog = new Dog();
 ```
 
 ----
@@ -110,16 +110,16 @@ You should just edit the source file at src/README.md - the one which stars with
 - *this* references the new object being created.
 - Returns a the new instance, no need for *return* as in a function.
 ```javascript
-  function Dog(name, breed) {
-    this.name = name;
-    this.breed = breed; 
-    this.bark = function() {
-      return this.name + ': woof, woof, woof!';
-    };
-  }
+function Dog(name, breed) {
+  this.name = name;
+  this.breed = breed; 
+  this.bark = function() {
+    return this.name + ': woof, woof, woof!';
+  };
+}
  
-  var myDog = new Dog('Sherlock', 'beagle');
-  console.log(myDog.bark());
+var myDog = new Dog('Sherlock', 'beagle');
+console.log(myDog.bark());
 ```
 
 ----
@@ -129,107 +129,40 @@ You should just edit the source file at src/README.md - the one which stars with
 - Defining functions in the constructor is not ideal, as a new function will be defined for each new instance.
 - By writing on the function's *prototype*, all instances can share functions and attributes.
 ```javascript
-  function Dog(name, breed) {
-    this.name = name;
-    this.breed = breed;
-  }
-    
-  Dog.prototype.bark = function() {
-    return this.name + ': woof, woof!';
-  };
-   
-  var myDog = new Dog('Sherlock', 'beagle');
-  console.log(myDog.bark());
+function Dog(name, breed) {
+  this.name = name;
+  this.breed = breed;
+}
+  
+Dog.prototype.bark = function() {
+  return this.name + ': woof, woof!';
+};
+ 
+var myDog = new Dog('Sherlock', 'beagle');
+console.log(myDog.bark());
 ```
-
----
-
-## Module
-
-- Applies classic OO ideas for building reusable components by supporting  private/public functions and attributes in objects.
-- Encapsulation achieved through *closures* -> function scope.
-```javascript
-  var myDog = (function(name, breed) { // IIFE
-    function getBarkStyle() {
-      return (breed === 'husky')? 'woooooow!': 'woof, woof!';
-    }; 
-
-    return {
-      bark: function() {
-        return name + ': ' + getBarkStyle();
-      }
-    };
-  })('Sherlock', 'beagle');
-
-  console.log(myDog.bark());
-```
-
-----
-
-## Revealing Module
-
-- Adds flexibility to switch methods and variables from public to private scope and vice-versa.
-```javascript
-  var myDog = (function(name, breed) { 
-    function getBarkStyle() {
-      return (breed === 'husky')? 'woooooow!': 'woof, woof!';
-    }; 
-    function bark() {
-      return name + ': ' + getBarkStyle();
-    };  
-
-    return {
-      name: name,
-      bark: bark
-    };
-  })('Sherlock', 'beagle');
-
-  console.log(myDog.bark());
-```
-
-----
-
-## Module Standards
-
-- Standards
-- First-class citizen in *CommonJS* and *AMD*.
-```javascript
-  // CommonJS syntax
-  exports.sum = function(numberA, numberB) {
-    return numberA + numberB;
-  };
-```
-```javascript
-  // AMD syntax
-  define([], function() {
-    return {
-      sum: function(numberA, numberB) {
-        return numberA + numberB;
-      }
-    };
-  });
-```
-- Will be part of ES 6 Harmony - the upcoming version of JS.
 
 ---
 
 ## Fa&ccedil;ade
 
 - Provides a convenient higher-level interface to a component, hiding its complexity and simplifying the API.
+- Example: retrieving a JSON from the server
 ```javascript
-  // Vanilla JS
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'http://code.jquery.com/jquery-latest.js', true);
-  xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status === 200) {
-      console.log('success');
-    }
-  };
+// Vanilla JS
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+  if (this.readyState == XMLHttpRequest.DONE && this.status === 200) {
+    console.log(JSON.parse(this.responseText));
+  }
+};
+xhr.open('GET', 'http://swapi.co/api/planets/1/', true);
+xhr.send();
 
-  // jQuery
-  $.get('http://code.jquery.com/jquery-latest.js', function(data) {
-     console.log('success');
-  });
+// jQuery
+$.getJSON('http://swapi.co/api/planets/1/', function(data) {
+   console.log(data);
+});
 ```
 
 ----
@@ -237,7 +170,7 @@ You should just edit the source file at src/README.md - the one which stars with
 ## Fa&ccedil;ade
 
 ```javascript
-var factorialFacade = (function() { 
+var factorial = (function() { 
   var intermediateResults = [0, 1];
   function calculate(n, stats) {
     if (intermediateResults[n] === undefined) {
@@ -246,19 +179,169 @@ var factorialFacade = (function() {
     }
     return intermediateResults[n];              
   }
-  return {
-    factorial: function(n) {
-      var stats = { ops: 0 },
-          result = (n > 0 && n % 1 === 0)? calculate(n, stats): 0;
-      return n + '! = ' + result + ' (' + stats.ops + ' operations)';
-    }
+  return function(n) {
+    var stats = { ops: 0 },
+        result = (n > 0 && n % 1 === 0)? calculate(n, stats): 0;
+    return n + '! = ' + result + ' (' + stats.ops + ' operations)';
   };
-})();
+})(); // IIFE
+```
+```javascript
+console.log(factorial(18)); // 18! = 6402373705728000 (17 operations)
+console.log(factorial(20)); // 20! = 2432902008176640000 (2 operations)
 ```
 
 [See it live on Plunker!](http://plnkr.co/edit/RxgtEUzah6DmC1jnlcim?p=preview)
 
 ---
+
+## Module
+
+- Applies classic OO ideas for building reusable components by supporting  private/public functions and attributes in objects.
+- Encapsulation achieved through *closures* -> function scope.
+```javascript
+var Zoo = (function() { 
+  var getBarkStyle = function(isHowler) {
+    return isHowler? 'woooooow!': 'woof, woof!';
+  }; 
+  return {
+    Dog: function(name, breed) {
+      this.name = name;
+      this.bark = getBarkStyle(breed === 'husky');
+    },
+    Wolf: function(name) {
+      this.name = name;
+      this.bark = getBarkStyle(true);
+    }
+  };
+})(); // IIFE
+```
+
+----
+
+## Module
+
+```
+var myDog = new Zoo.Dog('Sherlock', 'beagle');
+console.log(myDog.bark); // woof, woof!
+
+var myWolf = new Zoo.Wolf('Werewolf');
+console.log(myWolf.bark); // woooooow!
+```
+
+----
+
+## Revealing Module
+
+- Adds flexibility to switch methods and variables back and forth from public to private scope.
+```javascript
+var Zoo = (function() { 
+  var getBarkStyle = function(isHowler) {
+    return isHowler? 'woooooow!': 'woof, woof!';
+  }; 
+  var Dog = function(name, breed) {
+    this.name = name;
+    this.bark = getBarkStyle(breed === 'husky');
+  };
+  var Wolf = function(name) {
+    this.name = name;
+    this.bark = getBarkStyle(true);
+  };
+  return {
+    Dog: Dog,
+    Wolf: Wolf
+  };
+})(); // IIFE
+```
+
+----
+
+## Why to use Modules?
+
+- Global JS is bad for performance, reusability, readability, side-effects and code organization.
+- Literal objects' attributes and functions are all public. 
+- A module can be delivered as a dependency for other module.
+- Modules can be packaged and deployed separately from each other, mitigating "butterfly effect".
+- Modules bring cohesion up and coupling down.
+
+---
+
+## Module standards
+
+- On the previous example, *Zoo* is a global variable, which is:
+  - fragile (any posterior code can modify/redefine your module)
+  - not scalable (what if you need to define 100 modules?)
+  - counter-productive (you have to manually resolve your dependencies)
+- You can write your own module loader
+  - Module registration under aliases
+  - Dependency injection
+  - Factory instantiation
+- OR you can just adhere to a Module standard! 
+
+----
+
+## CommonJS
+
+- A standard for *synchronous* modules.
+- Pros:
+  - Official Node.js and NPM format.
+  - Simple and convenient syntax.
+  - Guaranteed order of execution of modules.
+- Cons:
+  - Doesn't naturally work on the browser (there are solutions for that as *Browserify* and *Webpack*).
+  - Sequential loading of modules might take more time than if they were to be loaded asynchronously.
+  - NPM dependency tree might easily end up adding lots of modules to your application.
+
+----
+
+## CommonJS
+
+- Export your module interface assigning to *module.exports*
+- Import on the client using *require(dependency)* 
+
+```javascript
+// zoo.js
+var getBarkStyle = function(isHowler) {
+  return isHowler? 'woooooow!': 'woof, woof!';
+}; 
+var Dog = function(name, breed) {
+  this.name = name;
+  this.bark = getBarkStyle(breed === 'husky');
+};
+var Wolf = function(name) {
+  this.name = name;
+  this.bark = getBarkStyle(true);
+};
+module.exports = {
+  Dog: Dog,
+  Wolf: Wolf
+};
+```
+
+----
+
+## CommonJS
+
+```javascript
+// main.js
+var Zoo = require('./zoo');
+
+var myDog = new Zoo.Dog('Sherlock', 'beagle');
+console.log(myDog.bark); // woof, woof!
+
+var myWolf = new Zoo.Wolf('Werewolf');
+console.log(myWolf.bark); // woooooow!
+```
+
+---
+
+## AMD
+
+---
+
+## ES6
+
+----
 
 ## Observer/Custom Event
 
