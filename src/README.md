@@ -443,22 +443,21 @@ console.log(myWolf.bark; // woooooow!
 - A *Subject* object maintains a list of interested *Observer* objects, automatically notifying them of its changes.
 ```javascript
   // subject.js
-  var observers = [];
+  var Subject = function() {
+    this.observers = [];
+  };
 
-  var notify = function(message) {
-    observers.forEach(function(observer) {
-      observer.callback.apply(observer, message);
+  Subject.prototype.notify = function(message) {
+    this.observers.forEach(function(observer) {
+      observer.apply(observer, message);
     });
   };
 
-  var addObserver = function(observer) {
-    observers.push(observer);
+  Subject.prototype.addObserver = function(observer) {
+    this.observers.push(observer);
   }; 
 
-  module.exports = {
-    notify: notify,
-    addObserver: addObserver
-  };
+  module.exports = Subject;
 ```
 
 ----
@@ -466,48 +465,52 @@ console.log(myWolf.bark; // woooooow!
 ## Observer/Custom Event
 
 ```javascript
-var subject = require('./subject');
+var Subject = require('./subject');
+var ball = new Subject();
+var human = new Subject();
 
 // register the animals (observers)
 var dog = function(message) {
-   console.log('The dog ran after the ' + message);
+  if (message === 'ball') {
+    console.log('The dog ran after the ' + message);
+  }
 };
-subject.addObserver(dog);
+ball.addObserver(dog);
+human.addObserver(dog);
 
 var cat = function(message) {
-   console.log('The cat ignored the ' + message);
+   console.log('The cat looked and ignored the ' + message);
 };
-subject.addObserver(cat);
-
-var macaw = function(message) {
-   console.log('The macaw quickly destroyed the ' + message);
-};
-subject.addObserver(dog);
+ball.addObserver(cat);
+human.addObserver(cat);
 ```
 
 ----
 
 ## Observer/Custom Event
 
-``` javascript
+```javascript
 // throw a ball (subject)
-subject.notify('ball');
+ball.notify('ball');
 
 // The dog ran after the ball
-// The cat ignored the ball
-// The macaw quickly destroyed the ball
+// The cat looked and ignored the ball
+
+// throw a human (subject)
+human.notify('human');
+
+// The cat looked and ignored the human
 ```
 
 - Notifier method is called -> all the observers will execute.
-- *Reduced coupling:* observers and subject can live without each other.
+- *Reduced coupling:* Observers and Subject can live without each other. However, still the Subject has references to the Observers.
 
 ---
 
 ## Mediator/Pub-Sub
 
 - Exposes an unified interface through which the different parts of a system may communicate.
-- Using *Observer* reduces the coupling, but notice how the Subject still hold references to the Observers.
-- Potential Garbage Collection issues: you must remember to remove the Observer references from all the Subjects.
+- Observer can cause Garbage Collection issues: if removing a Subject, you must remember to remove all the Observer references from it.
 - A *Mediator* can completely decouple Subject and Observers by introducing a intermediate layer in between.
 
 ----
@@ -515,24 +518,25 @@ subject.notify('ball');
 ## Mediator/Pub-Sub
 
 ```javascript
-  var mediator = {
-    channels: {},
-    subscribe: function(channel, fn) {
-      if (!mediator.channels[channel]) mediator.channels[channel] = [];
-      mediator.channels[channel].push({ context: this, callback: fn });
-    },
-    publish: function(channel){
-      if (!mediator.channels[channel]) return;
-      var args = Array.prototype.slice.call(arguments, 1);
-      $.each(mediator.channels[channel], function(index, subscriber) {
-        subscriber.callback.apply(subscriber.context, args);
-      });
-    },      
-    installTo: function(publisher){
-      publisher.subscribe = mediator.subscribe;
-      publisher.publish = mediator.publish;
-    }
-  };
+// mediator.js
+var channels = {};
+
+var subscribe = function(channel, subscriber) {
+  if (!channels[channel]) channels[channel] = [];
+  channels[channel].push(subscriber);
+};
+
+var publish = function(channel, message){
+  if (!channels[channel]) return;
+  channels[channel].forEach(function(subscriber) {
+    subscriber.apply(subscriber, message);
+  });
+};
+
+module.exports = {
+  subscribe: subscribe,
+  publish: publish
+};
 ```
 
 ----
@@ -540,51 +544,45 @@ subject.notify('ball');
 ## Mediator/Pub-Sub
 
 ```javascript
-  var soccerMatchSubject = (function(teamA, teamB) {
-    var scoreTable = {};
-    scoreTable[teamA] = scoreTable[teamB] = 0;
-    
-    return {
-      goal: function(team) {      
-        scoreTable[team]++;
-        score = teamA + ' ' + scoreTable[teamA] + ' x ' + 
-                scoreTable[teamB] + ' ' + teamB;
-                  
-        this.publish('loggers', 'goal', { team: team, score: score });
-      }
-    };
-  })('Brazil', 'Germany');
-    
-  mediator.installTo(soccerMatchSubject);
+var mediator = require('./mediator');
+
+// register the animals (subscribers to 'pets')
+var dog = function(message) {
+  if (message === 'ball') {
+    console.log('The dog ran after the ' + message);
+  }
+};
+mediator.subscribe('pets', dog);
+
+var cat = function(message) {
+  console.log('The cat looked and ignored the ' + message);
+};
+mediator.subscribe('pets', cat);
 ```
 
 ----
 
 ## Mediator/Pub-Sub
 
-- Again, we just need to add the observers to listen.
-```javascript
-  soccerMatchSubject.subscribe('loggers', consoleObserver);
-  soccerMatchSubject.subscribe('loggers', htmlObserver);
+``` javascript
+var mediator = require('./mediator');
+
+// throw a ball (publish to 'pets')
+mediator.publish('pets', 'ball');
+
+// The dog ran after the ball
+// The cat looked and ignored the ball
+
+// throw a ball (publish to 'pets')
+mediator.publish('pets', 'human');
+
+// The cat looked and ignored the human
 ```
+
 - Same Observers, same event triggering.
-- Now the Mediator is on top of the control. It is serving as a Pub-Sub infrastructure for components.
-
-<br/>
-[See it live on Plunker!](http://plnkr.co/edit/ZZHMn9?p=preview)
-
----
-
-
-
----
-
-## Conclusion
-
-- Design Patterns provide recommended solutions for common problems in OOP.
-- Javascript badly needs that to avoid "spaghetti code".
-- Patterns as Module, *Fa&ccedil;ade and Mediator can be combined in a solid solution for Large-Scale JS.
-- It is very important to avoid coupling at all costs in order to leverage scalability and maintainability.
+- The Mediator is required on both sides. 
+- Observers and Subject hold no references to each other.
+- The Mediator is on top of the control. It is serving as a Pub-Sub infrastructure for those components.
 
 ---
 
