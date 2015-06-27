@@ -92,14 +92,14 @@ July 21st, 2015
 - A special method used to initialize a newly created object once memory has been allocated.
 - JS is indeed OO but it differs from classic OO, and there are different ways to construct an object:
 ```javascript
-// object literal a.k.a. Singleton
-var myDog = {};
- 
-// ES5 Object.create method from prototype
-var myDog = Object.create(Dog.prototype);
- 
-// constructor call
-var myDog = new Dog();
+  // object literal a.k.a. Singleton
+  var myDog = {};
+   
+  // ES5 Object.create method from prototype
+  var myDog = Object.create(Dog.prototype);
+   
+  // constructor call
+  var myDog = new Dog();
 ```
 
 ----
@@ -110,16 +110,16 @@ var myDog = new Dog();
 - *this* references the new object being created.
 - Returns a the new instance, no need for *return* as in a function.
 ```javascript
-function Dog(name, breed) {
-  this.name = name;
-  this.breed = breed; 
-  this.bark = function() {
-    return this.name + ': woof, woof, woof!';
-  };
-}
- 
-var myDog = new Dog('Sherlock', 'beagle');
-console.log(myDog.bark());
+  function Dog(name, breed) {
+    this.name = name;
+    this.breed = breed; 
+    this.bark = function() {
+      return this.name + ': woof, woof, woof!';
+    };
+  }
+   
+  var myDog = new Dog('Sherlock', 'beagle');
+  console.log(myDog.bark());
 ```
 
 ----
@@ -129,17 +129,17 @@ console.log(myDog.bark());
 - Defining functions in the constructor is not ideal, as a new function will be defined for each new instance.
 - By writing on the function's *prototype*, all instances can share functions and attributes.
 ```javascript
-function Dog(name, breed) {
-  this.name = name;
-  this.breed = breed;
-}
-  
-Dog.prototype.bark = function() {
-  return this.name + ': woof, woof!';
-};
- 
-var myDog = new Dog('Sherlock', 'beagle');
-console.log(myDog.bark());
+  function Dog(name, breed) {
+    this.name = name;
+    this.breed = breed;
+  }
+    
+  Dog.prototype.bark = function() {
+    return this.name + ': woof, woof!';
+  };
+   
+  var myDog = new Dog('Sherlock', 'beagle');
+  console.log(myDog.bark());
 ```
 
 ---
@@ -147,22 +147,22 @@ console.log(myDog.bark());
 ## Fa&ccedil;ade
 
 - Provides a convenient higher-level interface to a component, hiding its complexity and simplifying the API.
-- Example: retrieving a JSON from the server
+- Example: printing out a JSON from the server
 ```javascript
-// Vanilla JS
-var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() {
-  if (this.readyState == XMLHttpRequest.DONE && this.status === 200) {
-    console.log(JSON.parse(this.responseText));
-  }
-};
-xhr.open('GET', 'http://swapi.co/api/planets/1/', true);
-xhr.send();
+  // Vanilla JS
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (this.readyState == XMLHttpRequest.DONE && this.status === 200) {
+      console.log(JSON.parse(this.responseText));
+    }
+  };
+  xhr.open('GET', 'http://swapi.co/api/planets/1/', true);
+  xhr.send();
 
-// jQuery
-$.getJSON('http://swapi.co/api/planets/1/', function(data) {
-   console.log(data);
-});
+  // jQuery
+  $.getJSON('http://swapi.co/api/planets/1/', function(data) {
+     console.log(data);
+  });
 ```
 
 ----
@@ -186,6 +186,7 @@ var factorial = (function() {
   };
 })(); // IIFE
 ```
+
 ```javascript
 console.log(factorial(18)); // 18! = 6402373705728000 (17 operations)
 console.log(factorial(20)); // 20! = 2432902008176640000 (2 operations)
@@ -200,33 +201,33 @@ console.log(factorial(20)); // 20! = 2432902008176640000 (2 operations)
 - Applies classic OO ideas for building reusable components by supporting  private/public functions and attributes in objects.
 - Encapsulation achieved through *closures* -> function scope.
 ```javascript
-var Zoo = (function() { 
-  var getBarkStyle = function(isHowler) {
-    return isHowler? 'woooooow!': 'woof, woof!';
-  }; 
-  return {
-    Dog: function(name, breed) {
-      this.name = name;
-      this.bark = getBarkStyle(breed === 'husky');
-    },
-    Wolf: function(name) {
-      this.name = name;
-      this.bark = getBarkStyle(true);
-    }
-  };
-})(); // IIFE
+  var Zoo = (function() { 
+    var getBarkStyle = function(isHowler) {
+      return isHowler? 'woooooow!': 'woof, woof!';
+    }; 
+    return {
+      Dog: function(name, breed) {
+        this.name = name;
+        this.bark = getBarkStyle(breed === 'husky');
+      },
+      Wolf: function(name) {
+        this.name = name;
+        this.bark = getBarkStyle(true);
+      }
+    };
+  })(); // IIFE
 ```
 
 ----
 
 ## Module
 
-```
-var myDog = new Zoo.Dog('Sherlock', 'beagle');
-console.log(myDog.bark); // woof, woof!
+```javascript
+  var myDog = new Zoo.Dog('Sherlock', 'beagle');
+  console.log(myDog.bark); // woof, woof!
 
-var myWolf = new Zoo.Wolf('Werewolf');
-console.log(myWolf.bark); // woooooow!
+  var myWolf = new Zoo.Wolf('Werewolf');
+  console.log(myWolf.bark); // woooooow!
 ```
 
 ----
@@ -235,23 +236,23 @@ console.log(myWolf.bark); // woooooow!
 
 - Adds flexibility to switch methods and variables back and forth from public to private scope.
 ```javascript
-var Zoo = (function() { 
-  var getBarkStyle = function(isHowler) {
-    return isHowler? 'woooooow!': 'woof, woof!';
-  }; 
-  var Dog = function(name, breed) {
-    this.name = name;
-    this.bark = getBarkStyle(breed === 'husky');
-  };
-  var Wolf = function(name) {
-    this.name = name;
-    this.bark = getBarkStyle(true);
-  };
-  return {
-    Dog: Dog,
-    Wolf: Wolf
-  };
-})(); // IIFE
+  var Zoo = (function() { 
+    var getBarkStyle = function(isHowler) {
+      return isHowler? 'woooooow!': 'woof, woof!';
+    }; 
+    var Dog = function(name, breed) {
+      this.name = name;
+      this.bark = getBarkStyle(breed === 'husky');
+    };
+    var Wolf = function(name) {
+      this.name = name;
+      this.bark = getBarkStyle(true);
+    };
+    return {
+      Dog: Dog,
+      Wolf: Wolf
+    };
+  })(); // IIFE
 ```
 
 ----
@@ -261,10 +262,10 @@ var Zoo = (function() {
 - Global JS is bad for performance, reusability, readability, side-effects and code organization.
 - Literal objects' attributes and functions are all public. 
 - A module can be delivered as a dependency for other module.
-- Modules can be packaged and deployed separately from each other, mitigating "butterfly effect".
+- Modules can be packaged and deployed separately from each other, mitigating the "butterfly effect".
 - Modules bring cohesion up and coupling down.
 
----
+----
 
 ## Module standards
 
@@ -272,13 +273,13 @@ var Zoo = (function() {
   - fragile (any posterior code can modify/redefine your module)
   - not scalable (what if you need to define 100 modules?)
   - counter-productive (you have to manually resolve your dependencies)
-- You can write your own module loader
-  - Module registration under aliases
+- You can write your own module loader!
+  - Container for module registration under aliases
   - Dependency injection
-  - Factory instantiation
-- OR you can just adhere to a Module standard! 
+  - Factory for instantiation
+- OR you can just use a Module standard! 
 
-----
+---
 
 ## CommonJS
 
@@ -289,8 +290,8 @@ var Zoo = (function() {
   - Guaranteed order of execution of modules.
 - Cons:
   - Doesn't naturally work on the browser (there are solutions for that as *Browserify* and *Webpack*).
-  - Sequential loading of modules might take more time than if they were to be loaded asynchronously.
-  - NPM dependency tree might easily end up adding lots of modules to your application.
+  - Sequential loading of modules is slower than asynchronous.
+  - NPM dependency tree can skyrocket easily.
 
 ----
 
@@ -298,7 +299,6 @@ var Zoo = (function() {
 
 - Export your module interface assigning to *module.exports*
 - Import on the client using *require(dependency)* 
-
 ```javascript
 // zoo.js
 var getBarkStyle = function(isHowler) {
@@ -337,11 +337,106 @@ console.log(myWolf.bark); // woooooow!
 
 ## AMD
 
----
-
-## ES6
+- A standard for *asynchronous* modules.
+- Pros:
+  - Multiple modules can be loaded in parallel.
+  - It naturally works on the browser.
+  - Easy to do lazy-loading of modules.
+- Cons:
+  - Complex, easy to create race conditions. 
+  - Not guaranteed order of execution of modules.
+  - Dependencies array declaration gets bloated easily.
 
 ----
+
+## AMD
+
+- On *Require.js*, export your module interface using *define()*.
+- Import on the client using *require()*.
+```javascript
+// zoo.js
+define('zoo', [], function() {
+  var getBarkStyle = function (isHowler) {
+    return isHowler? 'woooooow!': 'woof, woof!';
+  }; 
+  var Dog = function (name, breed) {
+    this.name = name;
+    this.bark = getBarkStyle(breed === 'husky');
+  };
+  var Wolf = function (name) {
+    this.name = name;
+    this.bark = getBarkStyle(true);
+  };
+  return {
+    Dog: Dog,
+    Wolf: Wolf
+  };
+});
+```
+
+----
+
+## AMD
+
+```javascript
+// main.js
+require(['zoo'], function(Zoo) {
+  var myDog = new Zoo.Dog('Sherlock', 'beagle');
+  console.log(myDog.bark); // woof, woof!
+
+  var myWolf = new Zoo.Wolf('Werewolf');
+  console.log(myWolf.bark); // woooooow!
+});
+```
+
+----
+
+## Interop?
+
+- CommonJS and AMD are not naturally compatible!
+- Some approaches to perform interop: *UMD*, *SystemJS* and *uRequire*.
+- *Almond*: AMD implementation for both sync and async loading.
+
+---
+
+## ES6 Modules
+
+- ES6 got approved on June and is getting rolled out as we speak.
+- ES6 offers native Modules which are quite a bit similar to CommonJS.
+```javascript
+  // zoo.js
+  var getBarkStyle = function(isHowler) {
+    return isHowler? 'woooooow!': 'woof, woof!';
+  }; 
+  export function Dog(name, breed) {
+    this.name = name;
+    this.bark = getBarkStyle(breed === 'husky');
+  };
+  export function Wolf(name) {
+    this.name = name;
+    this.bark = getBarkStyle(true);
+  };
+```
+
+----
+
+## ES6 Modules
+
+```javascript
+// main.js
+import { Dog, Wolf } from './zoo';
+
+var myDog = new Dog('Sherlock', 'beagle');
+console.log(myDog.bark; // woof, woof!
+
+var myWolf = new Wolf('Werewolf');
+console.log(myWolf.bark; // woooooow!
+```
+
+- ES6 modules will support both synchronous and asynchronous loading within the same syntax. 
+- Will work the same way both on the browser and on the server!
+
+---
 
 ## Observer/Custom Event
 
