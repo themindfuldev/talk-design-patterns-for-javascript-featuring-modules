@@ -440,83 +440,66 @@ console.log(myWolf.bark; // woooooow!
 
 ## Observer/Custom Event
 
-- A Subject object maintains a list of interested Observer objects, automatically notifying them of its changes.
+- A *Subject* object maintains a list of interested *Observer* objects, automatically notifying them of its changes.
 ```javascript
-  // Observers aka Listeners
-  var consoleObserver = function(event, msg) {
-    if (event === 'goal') {
-      console.log(msg.team + ' team just scored! ' + msg.score);
-    }
-  }
-    
-  var htmlObserver = function(event, msg) {
-    if (event === 'goal') {
-      $('h3').text(msg.team + ' team just scored! ' + msg.score);
-    }
-  }
-```
+  // subject.js
+  var observers = [];
 
-----
-
-## Observer/Custom Event
-
-```javascript
-  // Subject aka Event Emitter
-  var soccerMatchSubject = (function(teamA, teamB) {
-    var scoreTable = {},
-        observers = [];
-
-    scoreTable[teamA] = scoreTable[teamB] = 0;   
-
-    function notify() {
-      var args = arguments;
-      $.each(observers, function(index, observer) {
-        observer.callback.apply(observer.context, args);
-      });
-    }
-
-    //... continues on the next slide
-```
-
-----
-
-## Observer/Custom Event
-
-```javascript
-  //... from the previous slide
-  return {
-
-    addObserver: function(fn) {
-      observers.push({ context: this, callback: fn });
-    },
-
-    // notifier method
-    goal: function(team) {      
-      scoreTable[team]++;
-      score = teamA + ' ' + scoreTable[teamA] + ' x ' + 
-              scoreTable[teamB] + ' ' + teamB;
-            
-      notify('goal', { team: team, score: score });
-    }
+  var notify = function(message) {
+    observers.forEach(function(observer) {
+      observer.callback.apply(observer, message);
+    });
   };
 
-})('Brazil', 'Germany');
+  var addObserver = function(observer) {
+    observers.push(observer);
+  }; 
+
+  module.exports = {
+    notify: notify,
+    addObserver: addObserver
+  };
 ```
 
 ----
 
 ## Observer/Custom Event
 
-- Now we just need to add the observers to listen.
 ```javascript
-  soccerMatchSubject.addObserver(consoleObserver);
-  soccerMatchSubject.addObserver(htmlObserver);
-```
-- Notifier method is called -> all its observers will execute.
-- *Reduced coupling:* the observers and subject do not have hard dependencies on each other.
+var subject = require('./subject');
 
-<br/>
-[See it live on Plunker!](http://plnkr.co/edit/zOYp5LUINc3GzylhxrZH?p=preview)
+// register the animals (observers)
+var dog = function(message) {
+   console.log('The dog ran after the ' + message);
+};
+subject.addObserver(dog);
+
+var cat = function(message) {
+   console.log('The cat ignored the ' + message);
+};
+subject.addObserver(cat);
+
+var macaw = function(message) {
+   console.log('The macaw quickly destroyed the ' + message);
+};
+subject.addObserver(dog);
+```
+
+----
+
+## Observer/Custom Event
+
+``` javascript
+// throw a ball (subject)
+subject.notify('ball');
+
+// The dog ran after the ball
+// The cat ignored the ball
+// The macaw quickly destroyed the ball
+```
+
+- Notifier method is called -> all the observers will execute.
+- *Reduced coupling:* observers and subject can live without each other.
 
 ---
 
