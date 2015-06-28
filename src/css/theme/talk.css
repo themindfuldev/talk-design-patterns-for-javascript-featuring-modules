@@ -205,3 +205,5 @@ body {
     margin-bottom: 20px; }
   .reveal.center .slides section img {
     border: 0; }
+  .reveal.center .slides section .center {
+    text-align: center; }

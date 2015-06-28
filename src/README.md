@@ -22,7 +22,7 @@ You should just edit the source file at src/README.md - the one which stars with
 
 <img src="http://www.gravatar.com/avatar/5cac784a074b86d771fe768274f6860c?s=250" class="avatar">
 
-- Tech Manager at [Avenue Code](http://www.avenuecode.com) 
+- Tech Manager at [Avenue Code](http://www.avenuecode.com).
 - Tech Lead at [Macys.com](http://www.macys.com).
 - Organizer of the [Backbone.js Hackers meetup in SF](http://www.meetup.com/Backbone-js-Hackers).
 - Has spoken on [HTML5DevConf 2014](http://html5devconf.com/speakers/tiago_romerogarcia.html).
@@ -114,13 +114,14 @@ You should just edit the source file at src/README.md - the one which stars with
     this.name = name;
     this.breed = breed; 
     this.bark = function() {
-      return this.name + ': woof, woof, woof!';
+      return this.name + ': woof, woof!';
     };
   }
    
   var myDog = new Dog('Sherlock', 'beagle');
   console.log(myDog.bark());
 ```
+<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/constructor/basic.js)</p>
 
 ----
 
@@ -141,6 +142,7 @@ You should just edit the source file at src/README.md - the one which stars with
   var myDog = new Dog('Sherlock', 'beagle');
   console.log(myDog.bark());
 ```
+<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/constructor/prototype.js)</p>
 
 ---
 
@@ -191,8 +193,7 @@ var factorial = (function() {
 console.log(factorial(18)); // 18! = 6402373705728000 (17 operations)
 console.log(factorial(20)); // 20! = 2432902008176640000 (2 operations)
 ```
-
-[See it live on Plunker!](http://plnkr.co/edit/RxgtEUzah6DmC1jnlcim?p=preview)
+<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/facade/factorial.js)</p>
 
 ---
 
@@ -223,18 +224,19 @@ console.log(factorial(20)); // 20! = 2432902008176640000 (2 operations)
 ## Module
 
 ```javascript
-  var myDog = new Zoo.Dog('Sherlock', 'beagle');
-  console.log(myDog.bark); // woof, woof!
+var myDog = new Zoo.Dog('Sherlock', 'beagle');
+console.log(myDog.name + ': ' + myDog.bark); // Sherlock: woof, woof!
 
-  var myWolf = new Zoo.Wolf('Werewolf');
-  console.log(myWolf.bark); // woooooow!
+var myWolf = new Zoo.Wolf('Werewolf');
+console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 ```
+<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/module/basic.js)</p>
 
 ----
 
 ## Revealing Module
 
-- Adds flexibility to switch methods and variables back and forth from public to private scope.
+- Flexibility to switch items from private to public scope.
 ```javascript
   var Zoo = (function() { 
     var getBarkStyle = function(isHowler) {
@@ -254,6 +256,7 @@ console.log(factorial(20)); // 20! = 2432902008176640000 (2 operations)
     };
   })(); // IIFE
 ```
+<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/module/revealing.js)</p>
 
 ----
 
@@ -297,25 +300,25 @@ console.log(factorial(20)); // 20! = 2432902008176640000 (2 operations)
 
 ## CommonJS
 
-- Export your module interface assigning to *module.exports*
-- Import on the client using *require(dependency)* 
+- Export your module interface assigning to *module.exports*.
+- Import on the client using *require(dependency)*.
 ```javascript
-// zoo.js
-var getBarkStyle = function(isHowler) {
-  return isHowler? 'woooooow!': 'woof, woof!';
-}; 
-var Dog = function(name, breed) {
-  this.name = name;
-  this.bark = getBarkStyle(breed === 'husky');
-};
-var Wolf = function(name) {
-  this.name = name;
-  this.bark = getBarkStyle(true);
-};
-module.exports = {
-  Dog: Dog,
-  Wolf: Wolf
-};
+  // zoo.js
+  var getBarkStyle = function(isHowler) {
+    return isHowler? 'woooooow!': 'woof, woof!';
+  }; 
+  var Dog = function(name, breed) {
+    this.name = name;
+    this.bark = getBarkStyle(breed === 'husky');
+  };
+  var Wolf = function(name) {
+    this.name = name;
+    this.bark = getBarkStyle(true);
+  };
+  module.exports = {
+    Dog: Dog,
+    Wolf: Wolf
+  };
 ```
 
 ----
@@ -323,15 +326,17 @@ module.exports = {
 ## CommonJS
 
 ```javascript
-// main.js
+// client.js
 var Zoo = require('./zoo');
 
 var myDog = new Zoo.Dog('Sherlock', 'beagle');
-console.log(myDog.bark); // woof, woof!
+console.log(myDog.name + ': ' + myDog.bark); // Sherlock: woof, woof!
 
 var myWolf = new Zoo.Wolf('Werewolf');
-console.log(myWolf.bark); // woooooow!
+console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 ```
+<p class="center">[source code zoo.js](https://github.com/tiagorg/design-patterns-examples/blob/master/module/zoo.js)</p>
+<p class="center">[source code client.js](https://github.com/tiagorg/design-patterns-examples/blob/master/module/client.js)</p>
 
 ---
 
@@ -354,24 +359,24 @@ console.log(myWolf.bark); // woooooow!
 - On *Require.js*, export your module interface using *define()*.
 - Import on the client using *require()*.
 ```javascript
-// zoo.js
-define('zoo', [], function() {
-  var getBarkStyle = function (isHowler) {
-    return isHowler? 'woooooow!': 'woof, woof!';
-  }; 
-  var Dog = function (name, breed) {
-    this.name = name;
-    this.bark = getBarkStyle(breed === 'husky');
-  };
-  var Wolf = function (name) {
-    this.name = name;
-    this.bark = getBarkStyle(true);
-  };
-  return {
-    Dog: Dog,
-    Wolf: Wolf
-  };
-});
+  // zoo.js
+  define('zoo', [], function() {
+    var getBarkStyle = function (isHowler) {
+      return isHowler? 'woooooow!': 'woof, woof!';
+    }; 
+    var Dog = function (name, breed) {
+      this.name = name;
+      this.bark = getBarkStyle(breed === 'husky');
+    };
+    var Wolf = function (name) {
+      this.name = name;
+      this.bark = getBarkStyle(true);
+    };
+    return {
+      Dog: Dog,
+      Wolf: Wolf
+    };
+  });
 ```
 
 ----
@@ -379,13 +384,13 @@ define('zoo', [], function() {
 ## AMD
 
 ```javascript
-// main.js
+// client.js
 require(['zoo'], function(Zoo) {
   var myDog = new Zoo.Dog('Sherlock', 'beagle');
-  console.log(myDog.bark); // woof, woof!
+  console.log(myDog.name + ': ' + myDog.bark); // Sherlock: woof, woof!
 
   var myWolf = new Zoo.Wolf('Werewolf');
-  console.log(myWolf.bark); // woooooow!
+  console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 });
 ```
 
@@ -423,14 +428,14 @@ require(['zoo'], function(Zoo) {
 ## ES6 Modules
 
 ```javascript
-// main.js
+// client.js
 import { Dog, Wolf } from './zoo';
 
 var myDog = new Dog('Sherlock', 'beagle');
-console.log(myDog.bark; // woof, woof!
+console.log(myDog.name + ': ' + myDog.bark); // Sherlock: woof, woof!
 
 var myWolf = new Wolf('Werewolf');
-console.log(myWolf.bark; // woooooow!
+console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 ```
 
 - ES6 modules will support both synchronous and asynchronous loading within the same syntax. 
@@ -449,7 +454,7 @@ console.log(myWolf.bark; // woooooow!
 
   Subject.prototype.notify = function(message) {
     this.observers.forEach(function(observer) {
-      observer.apply(observer, message);
+      observer.call(observer, message);
     });
   };
 
@@ -475,14 +480,12 @@ var dog = function(message) {
     console.log('The dog ran after the ' + message);
   }
 };
-ball.addObserver(dog);
-human.addObserver(dog);
+ball.addObserver(dog); human.addObserver(dog);
 
 var cat = function(message) {
-   console.log('The cat looked and ignored the ' + message);
+  console.log('The cat looked and ignored the ' + message);
 };
-ball.addObserver(cat);
-human.addObserver(cat);
+ball.addObserver(cat); human.addObserver(cat);
 ```
 
 ----
@@ -491,19 +494,21 @@ human.addObserver(cat);
 
 ```javascript
 // throw a ball (subject)
+console.log('Throwing a ball...');
 ball.notify('ball');
-
 // The dog ran after the ball
 // The cat looked and ignored the ball
 
 // throw a human (subject)
+console.log('Throwing a human...');
 human.notify('human');
-
 // The cat looked and ignored the human
 ```
+<p class="center">[source code subject.js](https://github.com/tiagorg/design-patterns-examples/blob/master/observer/subject.js)</p>
+<p class="center">[source code client.js](https://github.com/tiagorg/design-patterns-examples/blob/master/observer/client.js)</p>
 
 - Notifier method is called -> all the observers will execute.
-- *Reduced coupling:* Observers and Subject can live without each other. However, still the Subject has references to the Observers.
+- *Reduced coupling:* Observers and Subject can live without each other, but  the Subject has references to the Observers.
 
 ---
 
@@ -520,16 +525,14 @@ human.notify('human');
 ```javascript
 // mediator.js
 var channels = {};
-
 var subscribe = function(channel, subscriber) {
   if (!channels[channel]) channels[channel] = [];
   channels[channel].push(subscriber);
 };
-
 var publish = function(channel, message){
   if (!channels[channel]) return;
   channels[channel].forEach(function(subscriber) {
-    subscriber.apply(subscriber, message);
+    subscriber.call(subscriber, message);
   });
 };
 
@@ -544,6 +547,7 @@ module.exports = {
 ## Mediator/Pub-Sub
 
 ```javascript
+// pets.js
 var mediator = require('./mediator');
 
 // register the animals (subscribers to 'pets')
@@ -565,19 +569,29 @@ mediator.subscribe('pets', cat);
 ## Mediator/Pub-Sub
 
 ``` javascript
+// client.js
+require('./pets');
+
 var mediator = require('./mediator');
 
 // throw a ball (publish to 'pets')
+console.log('Throwing a ball...');
 mediator.publish('pets', 'ball');
-
 // The dog ran after the ball
 // The cat looked and ignored the ball
 
-// throw a ball (publish to 'pets')
+// throw a human (publish to 'pets')
+console.log('Throwing a human...');
 mediator.publish('pets', 'human');
-
 // The cat looked and ignored the human
 ```
+<p class="center">[source code mediator.js](https://github.com/tiagorg/design-patterns-examples/blob/master/mediator/mediator.js)</p>
+<p class="center">[source code pets.js](https://github.com/tiagorg/design-patterns-examples/blob/master/mediator/pets.js)</p>
+<p class="center">[source code client.js](https://github.com/tiagorg/design-patterns-examples/blob/master/mediator/client.js)</p>
+
+----
+
+## Mediator/Pub-Sub
 
 - Same Observers, same event triggering.
 - The Mediator is required on both sides. 
@@ -588,6 +602,7 @@ mediator.publish('pets', 'human');
 
 ## Learn more
 
+- [Check out the examples code](https://github.com/tiagorg/design-patterns-examples)
 - [Javascript Patterns - Stoyan Stefanov](http://shop.oreilly.com/product/9780596806767.do)
 - [Learning JavaScript Design Patterns - Addy Osmani](http://addyosmani.com/resources/essentialjsdesignpatterns)
 - [The mind-boggling universe of JavaScript Module strategies](https://www.airpair.com/javascript/posts/the-mind-boggling-universe-of-javascript-modules)
