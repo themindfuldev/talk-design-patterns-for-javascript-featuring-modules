@@ -6,6 +6,10 @@ You should just edit the source file at src/README.md - the one which stars with
 
 -->
 
+<img src="img/devcon5.png">
+
+---
+
 ## Design patterns for JavaScript
 ### Featuring Modules
 <br/><br/><br/><br/>
@@ -26,6 +30,7 @@ July 21st, 2015
 - Tech Lead at [Macys.com](http://www.macys.com).
 - Organizer of the [Backbone.js Hackers meetup in SF](http://www.meetup.com/Backbone-js-Hackers).
 - Has spoken on [HTML5DevConf 2014](http://html5devconf.com/speakers/tiago_romerogarcia.html).
+- [2nd overall article on AirPair writing contest](https://www.airpair.com/javascript/posts/the-mind-boggling-universe-of-javascript-modules).
 
 ---
 
@@ -440,29 +445,37 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 
 - ES6 modules will support both synchronous and asynchronous loading within the same syntax. 
 - Will work the same way both on the browser and on the server!
+- You can use it right now with a good transpiler as [Babel.js](https://babeljs.io/).
 
 ---
 
 ## Observer/Custom Event
 
 - A *Subject* object maintains a list of interested *Observer* objects, automatically notifying them of its changes.
+
+<img src="img/observer.svg" class="diagram">
+
+----
+
+## Observer/Custom Event
+
 ```javascript
-  // subject.js
-  var Subject = function() {
-    this.observers = [];
-  };
+// subject.js
+var Subject = function() {
+  this.observers = [];
+};
 
-  Subject.prototype.notify = function(message) {
-    this.observers.forEach(function(observer) {
-      observer.call(observer, message);
-    });
-  };
+Subject.prototype.notify = function(message) {
+  this.observers.forEach(function(observer) {
+    observer.call(observer, message);
+  });
+};
 
-  Subject.prototype.addObserver = function(observer) {
-    this.observers.push(observer);
-  }; 
+Subject.prototype.addObserver = function(observer) {
+  this.observers.push(observer);
+}; 
 
-  module.exports = Subject;
+module.exports = Subject;
 ```
 
 ----
@@ -517,6 +530,12 @@ human.notify('human');
 - Exposes an unified interface through which the different parts of a system may communicate.
 - Observer can cause Garbage Collection issues: if removing a Subject, you must remember to remove all the Observer references from it.
 - A *Mediator* can completely decouple Subject and Observers by introducing a intermediate layer in between.
+
+----
+
+## Mediator/Pub-Sub
+
+<img src="img/mediator.svg" class="diagram">
 
 ----
 
@@ -602,7 +621,16 @@ mediator.publish('pets', 'human');
 
 ## Learn more
 
-- [Check out the examples code](https://github.com/tiagorg/design-patterns-examples).
+- [Check out the examples code](https://github.com/tiagorg/design-patterns-examples)
 - [Javascript Patterns - Stoyan Stefanov](http://shop.oreilly.com/product/9780596806767.do)
 - [Learning JavaScript Design Patterns - Addy Osmani](http://addyosmani.com/resources/essentialjsdesignpatterns)
 - [The mind-boggling universe of JavaScript Module strategies](https://www.airpair.com/javascript/posts/the-mind-boggling-universe-of-javascript-modules)
+
+---
+
+## Avenue Code
+
+- We are hiring!
+- [www.avenuecode.com/careers](http://www.avenuecode.com/careers)
+
+<img src="img/ac-logo.png" class="logo">

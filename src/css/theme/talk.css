@@ -163,6 +163,12 @@ body {
     -moz-border-radius: 10px;
     border-radius: 10px;
     border: 2px solid black; }
+  .reveal.center .slides section img.diagram {
+    border: 2px solid black;
+    width: 75%; }
+  .reveal.center .slides section img.logo {
+    background: none;
+    box-shadow: none; }
   .reveal.center .slides section ul.full {
     width: 100%; }
   .reveal.center .slides section img.icon {
@@ -177,7 +183,7 @@ body {
     font-style: normal; }
   .reveal.center .slides section div.footer {
     position: absolute;
-    width: 800px;
+    width: 100%;
     z-index: 999;
     left: 0;
     bottom: 20px;
