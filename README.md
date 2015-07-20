@@ -30,7 +30,7 @@ July 21st, 2015
 - Tech Lead at [Macys.com](http://www.macys.com).
 - Organizer of the [Backbone.js Hackers meetup in SF](http://www.meetup.com/Backbone-js-Hackers).
 - Has spoken on [HTML5DevConf 2014](http://html5devconf.com/speakers/tiago_romerogarcia.html).
-- [2nd overall article on AirPair writing contest](https://www.airpair.com/javascript/posts/the-mind-boggling-universe-of-javascript-modules).
+- [1th overall article on AirPair writing contest](https://www.airpair.com/javascript/posts/the-mind-boggling-universe-of-javascript-modules).
 
 ---
 
