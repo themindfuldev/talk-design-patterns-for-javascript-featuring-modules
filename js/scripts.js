@@ -5989,7 +5989,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.title); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + ", featuring modules</div>\n</div>\n<img src=\"img/ac-logo.png\" class=\"ac-logo\">";
+    + ", ";
+  if (stack1 = helpers.subtitle) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.subtitle); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n</div>\n<img src=\"img/ac-logo.png\" class=\"ac-logo\">";
   return buffer;
   });
 /* global Reveal */
@@ -6024,7 +6028,8 @@ Reveal.addEventListener('ready', function() {
   'use strict';
 
   var footer = TEMPLATES.footer({
-    title: 'Design patterns for JS'
+    title: 'Design patterns for JS',
+    subtitle: 'featuring modules'
   });
 
   var sectionEls = document.querySelectorAll('section:not(.stack)');

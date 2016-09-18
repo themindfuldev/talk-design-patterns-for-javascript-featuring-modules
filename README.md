@@ -7,7 +7,7 @@ You should just edit the source file at src/README.md - the one which stars with
 -->
 
 ## Design patterns for JS
-### Featuring Modules
+### featuring modules
 <img src="img/rubik.gif" class="logo"></p>
 
 Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - Oct 27th, 2016
@@ -26,7 +26,7 @@ Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - 
   <li>Tech Lead at [Macys.com](http://www.macys.com)</li>
   <li>Twitter: [@tiagooo_romero](https://twitter.com/tiagooo_romero)</li>
   <li>Site: *[tiagorg.com](http://tiagorg.com)*</li>
-  <li>*[@@email](mailto:@@email)*</li>
+  <li>*[tgarcia@avenuecode.com](mailto:tgarcia@avenuecode.com)*</li>
 </ul>
 
 ----

@@ -30,7 +30,8 @@ Reveal.addEventListener('ready', function() {
   'use strict';
 
   var footer = TEMPLATES.footer({
-    title: '@@title'
+    title: '@@title',
+    subtitle: '@@subtitle'
   });
 
   var sectionEls = document.querySelectorAll('section:not(.stack)');

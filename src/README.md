@@ -7,7 +7,7 @@ You should just edit the source file at src/README.md - the one which stars with
 -->
 
 ## @@title
-### Featuring Modules
+### @@subtitle
 <img src="img/rubik.gif" class="logo"></p>
 
 @@author @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - @@date
