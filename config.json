@@ -1,7 +1,7 @@
 {
-  "title": "Design patterns for JavaScript",
-  "description": "This talk will introduce fundamental design patterns for JavaScript and explain different JavaScript Module strategies such as ad hoc, CommonJS, AMD and ES6 modules.",
+  "title": "Design patterns for JS",
+  "description": "This talk will introduce fundamental design patterns for JavaScript and explain different JavaScript Module strategies such as ad hoc, CommonJS, AMD and ES2015 modules.",
   "author": "Tiago Garcia",
   "site": "http://tiagorg.com",
-  "date": "July 21st, 2015"
+  "date": "Oct 27th, 2016"
 }

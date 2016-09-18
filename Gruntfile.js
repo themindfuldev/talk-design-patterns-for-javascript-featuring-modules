@@ -24,7 +24,8 @@ module.exports = function(grunt) {
           console: false,
           unescape: false,
           require: true,
-          TEMPLATES: true
+          TEMPLATES: true,
+          define: true
         }
       },
       files: ['Gruntfile.js', 'src/js/**/*.js']
@@ -47,13 +48,15 @@ module.exports = function(grunt) {
         'display-property-grouping': false,
         'known-properties': false,
         'vendor-prefix': false,
+        'regex-selectors': false,
+        'outline-none': false
 
       },
       src: ['src/css/**/*.css']
     },
     concat: {
       js: {
-        src : ['src/js/head.js', 'src/js/reveal.js', 'js/lib/handlebars.runtime.min.js', 'template/handlebars.js', 'src/js/**/*.js'],
+        src : ['src/js/head.js', 'src/js/reveal.js', 'js/lib/handlebars.runtime.min.js', 'template/*.js', 'src/js/**/*.js'],
         dest : 'js/scripts.js'
       },
       css: {
@@ -127,14 +130,14 @@ module.exports = function(grunt) {
           'css/styles.min.css': ['css/styles.css'],
           'css/print/paper.min.css': ['css/print/paper.css'],
           'css/print/pdf.min.css': ['css/print/pdf.css'],
-          'css/theme/talk.min.css': ['css/theme/talk.css']
+          'css/theme/avenuecode.min.css': ['css/theme/avenuecode.css']
         }
       }
     },
     sass: {
       main: {
         files: {
-          'src/css/theme/talk.css': 'src/css/theme/source/talk.scss',
+          'src/css/theme/avenuecode.css': 'src/css/theme/source/avenuecode.scss',
         }
       }
     },
@@ -148,7 +151,7 @@ module.exports = function(grunt) {
         },
         files: [{
           src: ['src/template/*.hbs'],
-          dest: 'template/handlebars.js'
+          dest: 'template/templates.js'
         }]
       }
     },

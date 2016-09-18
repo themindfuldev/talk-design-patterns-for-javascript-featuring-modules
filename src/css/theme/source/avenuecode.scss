@@ -1,0 +1,166 @@
+/**
+ * Black theme for reveal.js. This is the opposite of the 'white' theme.
+ *
+ * By Hakim El Hattab, http://hakim.se
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+// Include theme-specific fonts
+@import url(../../lib/font/source-sans-pro/source-sans-pro.css);
+
+
+// Override theme settings (see ../template/settings.scss)
+$backgroundColor: #222;
+
+$mainColor: #fff;
+$headingColor: #A2A4FC;
+
+$mainFontSize: 38px;
+$mainFont: 'Source Sans Pro', Helvetica, sans-serif;
+$headingFont: 'Source Sans Pro', Helvetica, sans-serif;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: uppercase;
+$headingFontWeight: 600;
+$linkColor: #42affa;
+$linkColorHover: lighten( $linkColor, 15% );
+$selectionBackgroundColor: lighten( $linkColor, 25% );
+
+$heading1Size: 2.5em;
+$heading2Size: 1.6em;
+$heading3Size: 1.3em;
+$heading4Size: 1.0em;
+
+section.has-light-background {
+	&, h1, h2, h3, h4, h5, h6 {
+		color: #222;
+	}
+}
+
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+.slides {
+  section {
+    min-height: 100%;
+
+    img {
+      border: 0;
+      max-height: 450px;
+
+      &.logo {
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        border: 2px solid black;
+        height: 320px;
+      }
+
+      &.avatar {
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        border: 2px solid black;
+        width: 380px;
+      }
+
+      &.icon {
+        max-height: 250px;
+        max-width: 250px;
+        background: none;
+        position: absolute;
+        right: 0;
+        box-shadow: none;
+      }
+
+      &.ac-logo {
+        position: absolute;
+        max-height: none;
+        max-width: none;
+        width: 153px;
+        height: 109px;
+        z-index: 999;
+        right: 0;
+        bottom: 10px;
+        margin: 0px;
+        background: none;
+        box-shadow: none;
+        margin-bottom: 20px;
+      }
+
+      &.ac-logo-big {
+        float: left;
+        background: none;
+        border: none;
+        box-shadow: none;
+      }
+    }
+
+    .ac-column-logo {
+      float: left;
+    }
+
+    .ac-column-text {
+      float: right;
+      width: 55%;
+    }
+
+    pre {
+      min-width: 800px;
+    }
+
+    ul.full {
+      width: 100%;
+    }
+
+    em {
+      color: #FFA837 !important;
+      font-style: normal;
+    }
+
+    div.footer {
+      position: absolute;
+      width: 800px;
+      z-index: 999;
+      left: 0;
+      bottom: 20px;
+      color: #ddd;
+      height: 46px;
+      text-align: left;
+      margin-bottom: 20px;
+
+      * {
+        font-size: 24px;
+        text-align: left;
+      }
+
+      hr {
+        margin: 5px 0;
+      }
+    }
+
+    .icon-success {
+      color: #5cb85c;
+    }
+
+    .icon-warning {
+      color: #f0ad4e;
+    }
+
+    .icon-danger {
+      color: #d9534f;
+    }
+  }
+}
+
+.reveal .slide-number {
+  display: none;
+}

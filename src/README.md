@@ -6,31 +6,44 @@ You should just edit the source file at src/README.md - the one which stars with
 
 -->
 
-<img src="img/devcon5.png">
-
----
-
 ## @@title
 ### Featuring Modules
-<br/><br/><br/><br/>
+<img src="img/rubik.gif" class="logo"></p>
 
-[@@author](https://twitter.com/tiagooo_romero) @ [DevCon5](http://www.html5report.com/conference/newyork/)
-
-*@@site*
-
-@@date
+@@author @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - @@date
 
 ---
 
 ## Tiago Garcia
 
-<img src="http://www.gravatar.com/avatar/5cac784a074b86d771fe768274f6860c?s=250" class="avatar">
+<p class="ac-column-logo">
+  <img src="img/avatar.jpg" class="avatar ac-logo-big">
+</p>
 
-- Tech Manager at [Avenue Code](http://www.avenuecode.com).
-- Tech Lead at [Macys.com](http://www.macys.com).
-- Organizer of the [Backbone.js Hackers meetup in SF](http://www.meetup.com/Backbone-js-Hackers).
-- Has spoken on [HTML5DevConf 2014](http://html5devconf.com/speakers/tiago_romerogarcia.html).
-- [1th overall article on AirPair writing contest](https://www.airpair.com/javascript/posts/the-mind-boggling-universe-of-javascript-modules).
+<ul class="ac-column-text">
+  <li>JavaScript P.I., dog daddy, vegetarian rollerblader,<br/>not your typical Brazilian.</li>
+  <li>Tech Manager at [Avenue Code](http://www.avenuecode.com)</li>
+  <li>Tech Lead at [Macys.com](http://www.macys.com)</li>
+  <li>Twitter: [@tiagooo_romero](https://twitter.com/tiagooo_romero)</li>
+  <li>Site: *[tiagorg.com](http://tiagorg.com)*</li>
+  <li>*[@@email](mailto:@@email)*</li>
+</ul>
+
+----
+
+## Avenue Code
+
+<p class="ac-column-logo">
+  <img src="img/ac-logo-big.png" class="ac-logo-big" />
+</p>
+
+<ul class="ac-column-text">
+  <li>Offices in San Francisco, São Paulo, Belo Horizonte</li>
+  <li>Primary verticals: <br/>Retail & Financial services</li>
+  <li>Partners with MuleSoft, Adobe, Chef, Oracle and AWS</li>
+  <li>Project Management, Business Analysis, Development, QA, DevOps, Coaching</li>
+  <li>*[www.avenuecode.com/careers](https://www.avenuecode.com/carreers)*</li>
+</ul>
 
 ---
 
@@ -43,7 +56,7 @@ You should just edit the source file at src/README.md - the one which stars with
     - Module
       - CommonJS
       - AMD
-      - ES6
+      - ES2015
     - Observer aka Custom Event
     - Mediator aka Pub-Sub
 
@@ -51,10 +64,10 @@ You should just edit the source file at src/README.md - the one which stars with
 
 ## Patterns
 
-- Pattern: 
+- Pattern:
     - Proven *solution* to a certain class of *problems* in a specific *context*.
     - Pre-conditions -> requirements.
-    - Post-conditions -> consequences. 
+    - Post-conditions -> consequences.
 - Pattern *language*: a common vocabulary.
     - *Network* of connected patterns -> reuse.
 
@@ -66,6 +79,11 @@ You should just edit the source file at src/README.md - the one which stars with
 - 1994: *Gang Of Four* publishes [Design Patterns](http://www.amazon.com/Design-Patterns-Object-Oriented-Professional-Computing/dp/0201634988), a big watershed in the history of OOP and the debut of the term.
    - Features 23 classic design patterns, categorized in *creational*, *structural* and *behavioral*.
    - Many people believe that "Design Patterns" term is exclusive to those 23 patterns, which is not the case.
+
+----
+
+## Design Patterns
+
 - Back in 1994, programming languages' native support to Design Patterns was hazy.
 - Nowadays, many of those patterns have been incorporated into programming languages and frameworks.
 
@@ -84,7 +102,7 @@ You should just edit the source file at src/README.md - the one which stars with
    - ASYNC (AJAX/AJAJ) & Callbacks / Promises
    - Single Page Applications
 - Good reasons to use Design Patterns in JS:
-   - Avoid "spaghetti code" (unstructured and hard to read).
+   - Avoid "spaghetti code" (unstructured/hard to read).
    - Better overall maintainability, making it clear where to change the code.
    - Far more objective unit tests.
 - Today we are covering some of the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [Addy Osmani](https://twitter.com/addyosmani).
@@ -99,10 +117,10 @@ You should just edit the source file at src/README.md - the one which stars with
 ```javascript
   // object literal a.k.a. Singleton
   var myDog = {};
-   
+
   // ES5 Object.create method from prototype
   var myDog = Object.create(Dog.prototype);
-   
+
   // constructor call
   var myDog = new Dog();
 ```
@@ -117,12 +135,12 @@ You should just edit the source file at src/README.md - the one which stars with
 ```javascript
   function Dog(name, breed) {
     this.name = name;
-    this.breed = breed; 
+    this.breed = breed;
     this.bark = function() {
       return this.name + ': woof, woof!';
     };
   }
-   
+
   var myDog = new Dog('Sherlock', 'beagle');
   console.log(myDog.bark());
 ```
@@ -139,11 +157,11 @@ You should just edit the source file at src/README.md - the one which stars with
     this.name = name;
     this.breed = breed;
   }
-    
+
   Dog.prototype.bark = function() {
     return this.name + ': woof, woof!';
   };
-   
+
   var myDog = new Dog('Sherlock', 'beagle');
   console.log(myDog.bark());
 ```
@@ -177,14 +195,14 @@ You should just edit the source file at src/README.md - the one which stars with
 ## Fa&ccedil;ade
 
 ```javascript
-var factorial = (function() { 
+var factorial = (function() {
   var intermediateResults = [0, 1];
   function calculate(n, stats) {
     if (intermediateResults[n] === undefined) {
       stats.ops++;
       intermediateResults[n] = n * calculate(n - 1, stats);
     }
-    return intermediateResults[n];              
+    return intermediateResults[n];
   }
   return function(n) {
     var stats = { ops: 0 },
@@ -207,10 +225,10 @@ console.log(factorial(20)); // 20! = 2432902008176640000 (2 operations)
 - Applies classic OO ideas for building reusable components by supporting  private/public functions and attributes in objects.
 - Encapsulation achieved through *closures* -> function scope.
 ```javascript
-  var Zoo = (function() { 
+  var Zoo = (function() {
     var getBarkStyle = function(isHowler) {
       return isHowler? 'woooooow!': 'woof, woof!';
-    }; 
+    };
     return {
       Dog: function(name, breed) {
         this.name = name;
@@ -243,10 +261,10 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 
 - Flexibility to switch items from private to public scope.
 ```javascript
-  var Zoo = (function() { 
+  var Zoo = (function() {
     var getBarkStyle = function(isHowler) {
       return isHowler? 'woooooow!': 'woof, woof!';
-    }; 
+    };
     var Dog = function(name, breed) {
       this.name = name;
       this.bark = getBarkStyle(breed === 'husky');
@@ -268,7 +286,7 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 ## Why to use Modules?
 
 - Global JS is bad for performance, reusability, readability, side-effects and code organization.
-- Literal objects' attributes and functions are all public. 
+- Literal objects' attributes and functions are all public.
 - A module can be delivered as a dependency for other module.
 - Modules can be packaged and deployed separately from each other, mitigating the "butterfly effect".
 - Modules bring cohesion up and coupling down.
@@ -278,14 +296,14 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 ## Module standards
 
 - On the previous example, *Zoo* is a global variable, which is:
-  - fragile (any posterior code can modify/redefine your module)
-  - not scalable (what if you need to define 100 modules?)
+  - fragile (any posterior code can modify/redefine it)
+  - not scalable (what if you define 100 modules?)
   - counter-productive (you have to manually resolve your dependencies)
 - You can write your own module loader!
   - Container for module registration under aliases
   - Dependency injection
   - Factory for instantiation
-- OR you can just use a Module standard! 
+- OR you can just use a Module standard!
 
 ---
 
@@ -311,7 +329,7 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
   // zoo.js
   var getBarkStyle = function(isHowler) {
     return isHowler? 'woooooow!': 'woof, woof!';
-  }; 
+  };
   var Dog = function(name, breed) {
     this.name = name;
     this.bark = getBarkStyle(breed === 'husky');
@@ -353,7 +371,7 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
   - It naturally works on the browser.
   - Easy to do lazy-loading of modules.
 - Cons:
-  - Complex, easy to create race conditions. 
+  - Complex, easy to create race conditions.
   - Not guaranteed order of execution of modules.
   - Dependencies array declaration gets bloated easily.
 
@@ -368,7 +386,7 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
   define('zoo', [], function() {
     var getBarkStyle = function (isHowler) {
       return isHowler? 'woooooow!': 'woof, woof!';
-    }; 
+    };
     var Dog = function (name, breed) {
       this.name = name;
       this.bark = getBarkStyle(breed === 'husky');
@@ -417,7 +435,7 @@ require(['zoo'], function(Zoo) {
   // zoo.js
   var getBarkStyle = function(isHowler) {
     return isHowler? 'woooooow!': 'woof, woof!';
-  }; 
+  };
   export function Dog(name, breed) {
     this.name = name;
     this.bark = getBarkStyle(breed === 'husky');
@@ -443,7 +461,7 @@ var myWolf = new Wolf('Werewolf');
 console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 ```
 
-- ES6 modules will support both synchronous and asynchronous loading within the same syntax. 
+- ES6 modules will support both synchronous and asynchronous loading within the same syntax.
 - Will work the same way both on the browser and on the server!
 - You can use it right now with a good transpiler as [Babel.js](https://babeljs.io/).
 
@@ -473,7 +491,7 @@ Subject.prototype.notify = function(message) {
 
 Subject.prototype.addObserver = function(observer) {
   this.observers.push(observer);
-}; 
+};
 
 module.exports = Subject;
 ```
@@ -520,8 +538,8 @@ human.notify('human');
 <p class="center">[source code subject.js](https://github.com/tiagorg/design-patterns-examples/blob/master/observer/subject.js)</p>
 <p class="center">[source code client.js](https://github.com/tiagorg/design-patterns-examples/blob/master/observer/client.js)</p>
 
-- Notifier method is called -> all the observers will execute.
-- *Reduced coupling:* Observers and Subject can live without each other, but  the Subject has references to the Observers.
+- Notifier is called -> all the observers will execute.
+- *Reduced coupling:* Observers and Subject can live without each other, but the Subject has references to the Observers.
 
 ---
 
@@ -613,7 +631,7 @@ mediator.publish('pets', 'human');
 ## Mediator/Pub-Sub
 
 - Same Observers, same event triggering.
-- The Mediator is required on both sides. 
+- The Mediator is required on both sides.
 - Observers and Subject hold no references to each other.
 - The Mediator is on top of the control. It is serving as a Pub-Sub infrastructure for those components.
 
@@ -628,9 +646,16 @@ mediator.publish('pets', 'human');
 
 ---
 
-## Avenue Code
+# Questions?
 
-- We are hiring!
-- [www.avenuecode.com/careers](http://www.avenuecode.com/careers)
+<img src="img/questions.jpg" />
 
-<img src="img/ac-logo.png" class="logo">
+---
+
+# Thanks!
+
+- Special thanks to Avenue Code, Women Who Code crew and most importantly all the attendees!
+- Talk: [tiagorg.com/talk-design-patterns-for-javascript-featuring-modules](http://tiagorg.com/talk-design-patterns-for-javascript-featuring-modules)
+- Github: [github.com/tiagorg/talk-design-patterns-for-javascript-featuring-modules](https://github.com/tiagorg/talk-design-patterns-for-javascript-featuring-modules)
+- More talks at [tiagorg.com](http://tiagorg.com)
+- Follow me at [@tiagooo_romero](https://twitter.com/tiagooo_romero)
