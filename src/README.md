@@ -31,19 +31,7 @@ You should just edit the source file at src/README.md - the one which stars with
 
 ----
 
-## Avenue Code
-
-<p class="ac-column-logo">
-  <img src="img/ac-logo-big.png" class="ac-logo-big" />
-</p>
-
-<ul class="ac-column-text">
-  <li>Offices in San Francisco, São Paulo, Belo Horizonte</li>
-  <li>Primary verticals: <br/>Retail & Financial services</li>
-  <li>Partners with MuleSoft, Adobe, Chef, Oracle and AWS</li>
-  <li>Project Management, Business Analysis, Development, QA, DevOps, Coaching</li>
-  <li>*[www.avenuecode.com/careers](https://www.avenuecode.com/carreers)*</li>
-</ul>
+<img src="img/ac-slide.svg" class="full" />
 
 ---
 
@@ -167,63 +155,87 @@ You should just edit the source file at src/README.md - the one which stars with
 ```
 <p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/constructor/prototype.js)</p>
 
+----
+
+## ES2015 Classes
+
+- ES2015 introduced some syntax sugar to make this easier to code and more straightforward to read.
+```javascript
+  class Dog {
+    constructor(name, breed) {
+      this.name = name;
+      this.breed = breed;
+    }
+
+    bark() {
+      return `${this.name}: woof, woof!`;
+    }
+  }
+
+  var myDog = new Dog('Sherlock', 'beagle');
+  console.log(myDog.bark());
+```
+
 ---
 
 ## Fa&ccedil;ade
 
-- Provides a convenient higher-level interface to a component, hiding its complexity and simplifying the API.
+- Provides a convenient high-level interface to a component, hiding its underlying complexity.
 - Example: printing out a JSON from the server
 ```javascript
-  // Vanilla JS
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (this.readyState == XMLHttpRequest.DONE && this.status === 200) {
-      console.log(JSON.parse(this.responseText));
-    }
-  };
-  xhr.open('GET', 'http://swapi.co/api/planets/1/', true);
-  xhr.send();
+  function ajax(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      if (this.status === 200) {
+        callback(JSON.parse(this.responseText));
+      }
+    };
+    xhr.open('GET', url, true);
+    xhr.send();
+  }
 
-  // jQuery
-  $.getJSON('http://swapi.co/api/planets/1/', function(data) {
-     console.log(data);
-  });
+  ajax('http://swapi.co/api/planets/1/', console.log);
 ```
 
 ----
 
-## Fa&ccedil;ade
+## IIFE
 
 ```javascript
-var factorial = (function() {
-  var intermediateResults = [0, 1];
-  function calculate(n, stats) {
-    if (intermediateResults[n] === undefined) {
-      stats.ops++;
-      intermediateResults[n] = n * calculate(n - 1, stats);
-    }
-    return intermediateResults[n];
+var getCurrentWeather = (function() {
+  function generateResponse(useMetric, data) {
+    var unit = `°${useMetric? 'C': 'F'}`;
+    console.log(`${data.weather[0].main}, Now ${data.main.temp}${unit}, Min ${data.main.temp_min}${unit}, Max ${data.main.temp_max}${unit}`);
   }
-  return function(n) {
-    var stats = { ops: 0 },
-        result = (n > 0 && n % 1 === 0)? calculate(n, stats): 0;
-    return n + '! = ' + result + ' (' + stats.ops + ' operations)';
-  };
-})(); // IIFE
+  return function(city, country, useMetric) {
+    var unit = useMetric ? 'metric' : 'imperial';
+    var url = `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&units=${unit}&APPID=c48ddbf104363ec75645b36b470559fc`;
+    ajax(url, generateResponse.bind(undefined, useMetric));
+  }
+})();
 ```
 
 ```javascript
-console.log(factorial(18)); // 18! = 6402373705728000 (17 operations)
-console.log(factorial(20)); // 20! = 2432902008176640000 (2 operations)
+getCurrentWeather('San Francisco', 'US', false);
+getCurrentWeather('London', 'UK', true);
 ```
 <p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/facade/factorial.js)</p>
 
 ---
 
+## Challenge 1
+
+- Create a class called *`Location`* which has 3 attributes (*`city`*, *`country`*, *`useMetric`*) and a method *`getMyCurrentWeather`*, which would call *`getCurrentWeather`*.
+- Modify *`getCurrentWeather`* to also include the wind speed with its proper unit (meter/sec for metric or miles/hour for imperial).
+- You can fork from [http://codepen.io/tiagorg/pen/rryKRE?editors=0012](http://codepen.io/tiagorg/pen/rryKRE?editors=0012)
+- OpenWeatherMap API response: [http://openweathermap.org/current#current_JSON](http://openweathermap.org/current#current_JSON)
+
+---
+
 ## Module
 
-- Applies classic OO ideas for building reusable components by supporting  private/public functions and attributes in objects.
-- Encapsulation achieved through *closures* -> function scope.
+- Applies classic OO for building reusable components with private/public attributes and methods.
+- Encapsulation through *closures* -> function scope.
 ```javascript
   var Zoo = (function() {
     var getBarkStyle = function(isHowler) {
@@ -427,10 +439,10 @@ require(['zoo'], function(Zoo) {
 
 ---
 
-## ES6 Modules
+## ES2015 Modules
 
-- ES6 got approved on June and is getting rolled out as we speak.
-- ES6 offers native Modules which are quite a bit similar to CommonJS.
+- ES2015 got approved on June and is getting rolled out as we speak.
+- ES2015 offers native Modules which are quite a bit similar to CommonJS.
 ```javascript
   // zoo.js
   var getBarkStyle = function(isHowler) {
@@ -448,7 +460,7 @@ require(['zoo'], function(Zoo) {
 
 ----
 
-## ES6 Modules
+## ES2015 Modules
 
 ```javascript
 // client.js
@@ -461,7 +473,7 @@ var myWolf = new Wolf('Werewolf');
 console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 ```
 
-- ES6 modules will support both synchronous and asynchronous loading within the same syntax.
+- ES2015 modules will support both synchronous and asynchronous loading within the same syntax.
 - Will work the same way both on the browser and on the server!
 - You can use it right now with a good transpiler as [Babel.js](https://babeljs.io/).
 

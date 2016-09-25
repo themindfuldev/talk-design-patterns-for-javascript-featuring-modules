@@ -102,6 +102,10 @@ section.has-light-background {
         border: none;
         box-shadow: none;
       }
+
+      &.full {
+        max-height: initial;
+      }
     }
 
     .ac-column-logo {

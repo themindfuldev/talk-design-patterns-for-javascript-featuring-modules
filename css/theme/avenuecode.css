@@ -328,6 +328,8 @@ body {
       background: none;
       border: none;
       box-shadow: none; }
+    .slides section img.full {
+      max-height: initial; }
   .slides section .ac-column-logo {
     float: left; }
   .slides section .ac-column-text {
