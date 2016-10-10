@@ -485,8 +485,9 @@ console.log(`${myDog.name}: ${myDog.bark}`); // Sherlock: woof, woof!
 
 ## Challenge 2
 
-- Fork from your Challenge 1 solution or [http://plnkr.co/edit/mn8xjax2xwQwjuWpQUsK?p=preview](http://plnkr.co/edit/mn8xjax2xwQwjuWpQUsK?p=preview)
-- Break the code down in 3 ES2015 modules, each module in a separated file:
+- Fork from [http://bit.ly/2e2FBqB](http://bit.ly/2e2FBqB) (ES2015 setup).
+- Copy over the *`main.js`* from your Challenge 1 solution or [http://bit.ly/2e6nKmu](http://bit.ly/2e6nKmu)
+- Break *`main.js`* down in 3 ES2015 modules, each module in a separated file:
   - *`Location.js`*
   - *`getCurrentWeather.js`*
   - *`main.js`*
