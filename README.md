@@ -260,8 +260,16 @@ getCurrentWeather('Paris', 'FR', true);
 
 ## Module
 
-- Applies classic OO for building reusable components with private/public attributes and methods.
-- Encapsulation through *closures* -> function scope.
+- *Structural* pattern
+- Purpose: to define reusable components with private/public attributes and methods.
+- Encapsulation through *closures*, using function scope.
+- Pre-condition: a chunk of code with a return point
+- Post-condition: a module definition that encapsulates that chunk of code
+
+----
+
+## Module
+
 ```javascript
   var Zoo = (function() {
     var getBarkStyle = function(isHowler) {
@@ -280,18 +288,11 @@ getCurrentWeather('Paris', 'FR', true);
   })(); // IIFE
 ```
 
-----
-
-## Module
-
 ```javascript
 var myDog = new Zoo.Dog('Sherlock', 'beagle');
 console.log(myDog.name + ': ' + myDog.bark); // Sherlock: woof, woof!
-
-var myWolf = new Zoo.Wolf('Werewolf');
-console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 ```
-<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/module/basic.js)</p>
+<p class="center">[view on Plunker](http://plnkr.co/edit/JEgEpo?p=preview)</p>
 
 ----
 
@@ -299,15 +300,13 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 
 - Flexibility to switch items from private to public scope.
 ```javascript
-  var Zoo = (function() {
-    var getBarkStyle = function(isHowler) {
-      return isHowler? 'woooooow!': 'woof, woof!';
-    };
-    var Dog = function(name, breed) {
+  let Zoo = (function() {
+    let getBarkStyle = isHowler => isHowler ? 'woooooow!' : 'woof, woof!';
+    let Dog = function(name, breed) {
       this.name = name;
       this.bark = getBarkStyle(breed === 'husky');
     };
-    var Wolf = function(name) {
+    let Wolf = function(name) {
       this.name = name;
       this.bark = getBarkStyle(true);
     };
@@ -317,31 +316,31 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
     };
   })(); // IIFE
 ```
-<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/module/revealing.js)</p>
+
+<p class="center">[view on Plunker](http://plnkr.co/edit/wptpQ5?p=preview)</p>
 
 ----
 
 ## Why to use Modules?
 
-- Global JS is bad for performance, reusability, readability, side-effects and code organization.
-- Literal objects' attributes and functions are all public.
-- A module can be delivered as a dependency for other module.
+- Global JS is bad for performance, reusability, readability, code organization and allows side-effects.
+- A module can be delivered as a dependency for another module.
 - Modules can be packaged and deployed separately from each other, mitigating the "butterfly effect".
 - Modules bring cohesion up and coupling down.
 
 ----
 
-## Module standards
+## Module loaders
 
-- On the previous example, *Zoo* is a global variable, which is:
+- On the previous example, *Zoo* is a global var, which is:
   - fragile (any posterior code can modify/redefine it)
   - not scalable (what if you define 100 modules?)
   - counter-productive (you have to manually resolve your dependencies)
-- You can write your own module loader!
+- Enter *module loaders*:
   - Container for module registration under aliases
   - Dependency injection
-  - Factory for instantiation
-- OR you can just use a Module standard!
+  - Modules loading on demand
+- Included with your Module standard of choice!
 
 ---
 
@@ -361,18 +360,16 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 
 ## CommonJS
 
-- Export your module interface assigning to *module.exports*.
-- Import on the client using *require(dependency)*.
+- Export your module interface with *module.exports*
+- Import on the client using *require(dependency)*
 ```javascript
   // zoo.js
-  var getBarkStyle = function(isHowler) {
-    return isHowler? 'woooooow!': 'woof, woof!';
-  };
-  var Dog = function(name, breed) {
+  let getBarkStyle = isHowler => isHowler ? 'woooooow!' : 'woof, woof!';
+  let Dog = function(name, breed) {
     this.name = name;
     this.bark = getBarkStyle(breed === 'husky');
   };
-  var Wolf = function(name) {
+  let Wolf = function(name) {
     this.name = name;
     this.bark = getBarkStyle(true);
   };
@@ -388,16 +385,12 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 
 ```javascript
 // client.js
-var Zoo = require('./zoo');
+let Zoo = require('./zoo');
 
-var myDog = new Zoo.Dog('Sherlock', 'beagle');
-console.log(myDog.name + ': ' + myDog.bark); // Sherlock: woof, woof!
-
-var myWolf = new Zoo.Wolf('Werewolf');
-console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
+let myDog = new Zoo.Dog('Sherlock', 'beagle');
+console.log(`${myDog.name}: ${myDog.bark}`); // Sherlock: woof, woof!
 ```
-<p class="center">[source code zoo.js](https://github.com/tiagorg/design-patterns-examples/blob/master/module/zoo.js)</p>
-<p class="center">[source code client.js](https://github.com/tiagorg/design-patterns-examples/blob/master/module/client.js)</p>
+<p class="center">[view on Plunker](http://plnkr.co/edit/m0UXQg?p=preview)</p>
 
 ---
 
@@ -407,29 +400,27 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 - Pros:
   - Multiple modules can be loaded in parallel.
   - It naturally works on the browser.
-  - Easy to do lazy-loading of modules.
+  - Easy to lazy-load modules.
 - Cons:
   - Complex, easy to create race conditions.
   - Not guaranteed order of execution of modules.
-  - Dependencies array declaration gets bloated easily.
+  - Dependencies array gets hard to read easily.
 
 ----
 
-## AMD
+## AMD (Require.js)
 
-- On *Require.js*, export your module interface using *define()*.
-- Import on the client using *require()*.
+- Export your module interface with *define()*
+- Import on the client using *require()*
 ```javascript
   // zoo.js
   define('zoo', [], function() {
-    var getBarkStyle = function (isHowler) {
-      return isHowler? 'woooooow!': 'woof, woof!';
-    };
-    var Dog = function (name, breed) {
+    let getBarkStyle = isHowler => isHowler ? 'woooooow!' : 'woof, woof!';
+    let Dog = function (name, breed) {
       this.name = name;
       this.bark = getBarkStyle(breed === 'husky');
     };
-    var Wolf = function (name) {
+    let Wolf = function (name) {
       this.name = name;
       this.bark = getBarkStyle(true);
     };
@@ -447,33 +438,22 @@ console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
 ```javascript
 // client.js
 require(['zoo'], function(Zoo) {
-  var myDog = new Zoo.Dog('Sherlock', 'beagle');
-  console.log(myDog.name + ': ' + myDog.bark); // Sherlock: woof, woof!
-
-  var myWolf = new Zoo.Wolf('Werewolf');
-  console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
+  let myDog = new Zoo.Dog('Sherlock', 'beagle');
+  console.log(`${myDog.name}: ${myDog.bark}`); // Sherlock: woof, woof!
 });
 ```
 
-----
-
-## Interop?
-
-- CommonJS and AMD are not naturally compatible!
-- Some approaches to perform interop: *UMD*, *SystemJS* and *uRequire*.
-- *Almond*: AMD implementation for both sync and async loading.
+<p class="center">[view on Plunker](http://plnkr.co/edit/VVmdjt?p=preview)</p>
 
 ---
 
 ## ES2015 Modules
 
-- ES2015 got approved on June and is getting rolled out as we speak.
 - ES2015 offers native Modules which are quite a bit similar to CommonJS.
 ```javascript
   // zoo.js
-  var getBarkStyle = function(isHowler) {
-    return isHowler? 'woooooow!': 'woof, woof!';
-  };
+  let getBarkStyle = isHowler => isHowler ? 'woooooow!' : 'woof, woof!';
+
   export function Dog(name, breed) {
     this.name = name;
     this.bark = getBarkStyle(breed === 'husky');
@@ -492,16 +472,27 @@ require(['zoo'], function(Zoo) {
 // client.js
 import { Dog, Wolf } from './zoo';
 
-var myDog = new Dog('Sherlock', 'beagle');
-console.log(myDog.name + ': ' + myDog.bark); // Sherlock: woof, woof!
-
-var myWolf = new Wolf('Werewolf');
-console.log(myWolf.name + ': ' + myWolf.bark); // Werewolf: woof, woof!
+console.log(`${myDog.name}: ${myDog.bark}`); // Sherlock: woof, woof!
 ```
 
-- ES2015 modules will support both synchronous and asynchronous loading within the same syntax.
-- Will work the same way both on the browser and on the server!
-- You can use it right now with a good transpiler as [Babel.js](https://babeljs.io/).
+<p class="center">[view on Plunker](http://plnkr.co/edit/sfv37R?p=preview)</p>
+
+- ES2015 Modules are not yet natively supported by browsers & Node.js.
+- You can use it right now with a transpiler as [Babel.js](https://babeljs.io/).
+- Consider a module loader such as [System.js](https://github.com/systemjs/systemjs), which supports AMD, CommonJS, ES2015 and global.
+
+---
+
+## Challenge 2
+
+- Fork from your Challenge 1 solution or [http://plnkr.co/edit/mn8xjax2xwQwjuWpQUsK?p=preview](http://plnkr.co/edit/mn8xjax2xwQwjuWpQUsK?p=preview)
+- Break the code down in 3 ES2015 modules, each module in a separated file:
+  - *`Location.js`*
+  - *`getCurrentWeather.js`*
+  - *`main.js`*
+- When exporting/importing a single item:
+  - Export: *`export default Module`*
+  - Import: *`import Module from ...`*
 
 ---
 
