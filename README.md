@@ -53,20 +53,20 @@ Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - 
 ## Patterns
 
 - Pattern:
-    - Proven *solution* to a certain class of *problems* in a specific *context*.
-    - Pre-conditions -> requirements.
-    - Post-conditions -> consequences.
-- Pattern *language*: a common vocabulary.
-    - *Network* of connected patterns -> reuse.
+    - Proven *solution* to a certain class of *problems* in a specific *context*
+    - Pre-conditions -> requirements
+    - Post-conditions -> consequences
+- Pattern *language*: a common vocabulary
+- *Network* of connected patterns -> reuse
 
 ----
 
 ## Design Patterns
 
 - Design Patterns address common OOP problems.
-- 1994: *Gang Of Four* publishes [Design Patterns](http://www.amazon.com/Design-Patterns-Object-Oriented-Professional-Computing/dp/0201634988), a big watershed in the history of OOP and the debut of the term.
+- 1994: *Gang Of Four* publishes [Design Patterns](http://www.amazon.com/Design-Patterns-Object-Oriented-Professional-Computing/dp/0201634988), a critical turning point in the history of OOP.
    - Features 23 classic design patterns, categorized in *creational*, *structural* and *behavioral*.
-   - Many people believe that "Design Patterns" term is exclusive to those 23 patterns, which is not the case.
+   - Many believe that "Design Patterns" term is exclusive to those 23 patterns -> not the case
 
 ----
 
@@ -74,6 +74,20 @@ Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - 
 
 - Back in 1994, programming languages' native support to Design Patterns was hazy.
 - Nowadays, many of those patterns have been incorporated into programming languages and frameworks.
+
+---
+
+## JS Design Patterns
+
+- JS code is more complex today than ever before.
+   - Dazzling experience & interaction
+   - Async calls, Callbacks, Promises
+   - Single Page Applications
+- Good reasons to use Design Patterns in JS:
+   - Avoid "spaghetti code" (unstructured/hard to read).
+   - Better overall maintainability, making it clear where to change the code.
+   - Far more objective unit tests.
+- Today we are covering some of the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [Addy Osmani](https://twitter.com/addyosmani).
 
 ----
 
@@ -83,24 +97,17 @@ Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - 
 
 ---
 
-## JS Design Patterns
+## Constructor
 
-- JS code is more complex today than ever before.
-   - Dazzling experience & interaction
-   - ASYNC (AJAX/AJAJ) & Callbacks / Promises
-   - Single Page Applications
-- Good reasons to use Design Patterns in JS:
-   - Avoid "spaghetti code" (unstructured/hard to read).
-   - Better overall maintainability, making it clear where to change the code.
-   - Far more objective unit tests.
-- Today we are covering some of the work of [Stoyan Stefanov](https://twitter.com/stoyanstefanov) and [Addy Osmani](https://twitter.com/addyosmani).
+- *Creational* pattern
+- Purpose: to initialize a newly created object once memory has been allocated.
+- Pre-condition: a definition for the object
+- Post-condition: a customized object allocated in the memory
 
-
----
+----
 
 ## Constructor
 
-- A special method used to initialize a newly created object once memory has been allocated.
 - JS is indeed OO but it differs from classic OO, and there are different ways to construct an object:
 ```javascript
   // object literal a.k.a. Singleton
@@ -119,7 +126,8 @@ Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - 
 
 - *new* must be used before invoking.
 - *this* references the new object being created.
-- Returns a the new instance, no need for *return* as in a function.
+- Returns a new instance, no need for *return*.
+
 ```javascript
   function Dog(name, breed) {
     this.name = name;
@@ -132,20 +140,20 @@ Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - 
   var myDog = new Dog('Sherlock', 'beagle');
   console.log(myDog.bark());
 ```
-<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/constructor/basic.js)</p>
+<p class="center">[view on Plunker](http://plnkr.co/edit/ARySm1?p=preview)</p>
 
 ----
 
 ## Prototype
 
-- Defining functions in the constructor is not ideal, as a new function will be defined for each new instance.
-- By writing on the function's *prototype*, all instances can share functions and attributes.
+- Defining a method in the constructor is bad, as each new instance will contain a definition for the method.
+- By writing on the function's *prototype*, all instances can share the same definition of a method.
+
 ```javascript
   function Dog(name, breed) {
     this.name = name;
     this.breed = breed;
   }
-
   Dog.prototype.bark = function() {
     return this.name + ': woof, woof!';
   };
@@ -153,13 +161,14 @@ Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - 
   var myDog = new Dog('Sherlock', 'beagle');
   console.log(myDog.bark());
 ```
-<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/constructor/prototype.js)</p>
+
 
 ----
 
 ## ES2015 Classes
 
 - ES2015 introduced some syntax sugar to make this easier to code and more straightforward to read.
+
 ```javascript
   class Dog {
     constructor(name, breed) {
@@ -176,15 +185,27 @@ Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - 
   console.log(myDog.bark());
 ```
 
+<p class="center">[view on Plunker](http://plnkr.co/edit/xSNeLd?p=preview)</p>
+
 ---
 
 ## Fa&ccedil;ade
 
-- Provides a convenient high-level interface to a component, hiding its underlying complexity.
+- *Structural* pattern
+- Purpose: to provide a convenient high-level interface to a component, hiding its underlying complexity.
+- Represents one of the main principles from GoF: "Program to an interface, not an implementation".
+- Pre-condition: a complex, low-level code chunk
+- Post-condition: a simplified, high-level interface
+
+----
+
+## Fa&ccedil;ade
+
 - Example: printing out a JSON from the server
+
 ```javascript
   function ajax(url, callback) {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.onload = function() {
       if (this.status === 200) {
         callback(JSON.parse(this.responseText));
@@ -197,15 +218,19 @@ Tiago Garcia @ [Women Who Code SF](https://www.meetup.com/Women-Who-Code-SF/) - 
   ajax('http://swapi.co/api/planets/1/', console.log);
 ```
 
+<p class="center">[view on Plunker](http://plnkr.co/edit/bqCCAq?p=preview)</p>
+
 ----
 
 ## IIFE
+
+- Self-invoked function, keeps internal variables and functions as private, within its closure.
 
 ```javascript
 var getCurrentWeather = (function() {
   function generateResponse(useMetric, data) {
     var unit = `°${useMetric? 'C': 'F'}`;
-    console.log(`${data.weather[0].main}, Now ${data.main.temp}${unit}, Min ${data.main.temp_min}${unit}, Max ${data.main.temp_max}${unit}`);
+    console.log(`${data.weather[0].main}. Now ${data.main.temp}${unit}.`);
   }
   return function(city, country, useMetric) {
     var unit = useMetric ? 'metric' : 'imperial';
@@ -217,18 +242,19 @@ var getCurrentWeather = (function() {
 
 ```javascript
 getCurrentWeather('San Francisco', 'US', false);
-getCurrentWeather('London', 'UK', true);
+getCurrentWeather('Paris', 'FR', true);
 ```
-<p class="center">[source code](https://github.com/tiagorg/design-patterns-examples/blob/master/facade/factorial.js)</p>
+<p class="center">[view on Plunker](http://plnkr.co/edit/u3xVQh?p=preview)</p>
 
 ---
 
 ## Challenge 1
 
-- Create a class called *`Location`* which has 3 attributes (*`city`*, *`country`*, *`useMetric`*) and a method *`getMyCurrentWeather`*, which would call *`getCurrentWeather`*.
-- Modify *`getCurrentWeather`* to also include the wind speed with its proper unit (meter/sec for metric or miles/hour for imperial).
-- You can fork from [http://codepen.io/tiagorg/pen/rryKRE?editors=0012](http://codepen.io/tiagorg/pen/rryKRE?editors=0012)
-- OpenWeatherMap API response: [http://openweathermap.org/current#current_JSON](http://openweathermap.org/current#current_JSON)
+- Fork from [http://plnkr.co/edit/u3xVQh?p=preview](http://plnkr.co/edit/u3xVQh?p=preview)
+- Take a moment to understand this implementation.
+- Write a class *`Location`* whose constructor receives 3 attributes: *`city`*, *`country`* and *`useMetric`*.
+- Under *`Location`*, write a method *`getMyCurrentWeather(printFn)`*, which will call *`getCurrentWeather`* behind the scenes.
+- Now, replace the 2 invocations to get weather from San Francisco and Paris with 2 instances of *`Location`*, one for each city, where you will call its method *`getMyCurrentWeather`*.
 
 ---
 
