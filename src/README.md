@@ -45,8 +45,7 @@ You should just edit the source file at src/README.md - the one which stars with
       - CommonJS
       - AMD
       - ES2015
-    - Observer aka Custom Event
-    - Mediator aka Pub-Sub
+    - Observer aka Event
 
 ---
 
@@ -56,6 +55,7 @@ You should just edit the source file at src/README.md - the one which stars with
     - Proven *solution* to a certain class of *problems* in a specific *context*
     - Pre-conditions -> requirements
     - Post-conditions -> consequences
+- Term coined by *Christopher Alexander*, an architect, as an aid to design cities and buildings, in 1977.
 - Pattern *language*: a common vocabulary
 - *Network* of connected patterns -> reuse
 
@@ -63,7 +63,7 @@ You should just edit the source file at src/README.md - the one which stars with
 
 ## Design Patterns
 
-- Design Patterns address common OOP problems.
+- In computing, Design Patterns came to address common problems in OOP.
 - 1994: *Gang Of Four* publishes [Design Patterns](http://www.amazon.com/Design-Patterns-Object-Oriented-Professional-Computing/dp/0201634988), a critical turning point in the history of OOP.
    - Features 23 classic design patterns, categorized in *creational*, *structural* and *behavioral*.
    - Many believe that "Design Patterns" term is exclusive to those 23 patterns -> not the case
@@ -73,7 +73,7 @@ You should just edit the source file at src/README.md - the one which stars with
 ## Design Patterns
 
 - Back in 1994, programming languages' native support to Design Patterns was hazy.
-- Nowadays, many of those patterns have been incorporated into programming languages and frameworks.
+- Nowadays, many of those patterns have been incorporated into programming languages and frameworks. Ex: Python, Java.
 
 ---
 
@@ -224,7 +224,24 @@ You should just edit the source file at src/README.md - the one which stars with
 
 ## IIFE
 
-- Self-invoked function, keeps internal variables and functions as private, within its closure.
+- Immediately-Invoked Function Expression, keeps internal vars and functions as private, within closure.
+- 2 flavors:
+
+```javascript
+// Parenthesis around function
+var result1 = ( function() {
+  ...
+} )(); // After parenthesis, () to invoke it
+
+// Parenthesis around entire expression
+var result2 = ( function() {
+  ...
+}() ); // After function, () to invoke it
+```
+
+----
+
+## IIFE
 
 ```javascript
 var getCurrentWeather = (function() {
@@ -237,7 +254,7 @@ var getCurrentWeather = (function() {
     var url = `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&units=${unit}&APPID=c48ddbf104363ec75645b36b470559fc`;
     ajax(url, generateResponse.bind(undefined, useMetric));
   }
-})();
+})(); // IIFE - declaration and invocation in a single shot
 ```
 
 ```javascript
@@ -475,7 +492,7 @@ import { Dog, Wolf } from './zoo';
 console.log(`${myDog.name}: ${myDog.bark}`); // Sherlock: woof, woof!
 ```
 
-<p class="center">[view on Plunker](http://plnkr.co/edit/sfv37R?p=preview)</p>
+<p class="center">[view on Plunker](http://plnkr.co/edit/yxkn9i?p=preview)</p>
 
 - ES2015 Modules are not yet natively supported by browsers & Node.js.
 - You can use it right now with a transpiler as [Babel.js](https://babeljs.io/).
@@ -485,10 +502,10 @@ console.log(`${myDog.name}: ${myDog.bark}`); // Sherlock: woof, woof!
 
 ## Challenge 2
 
-- Fork from [http://bit.ly/2e2FBqB](http://bit.ly/2e2FBqB) (ES2015 setup).
+- Fork from [http://bit.ly/2e4jfGw](http://bit.ly/2e4jfGw) (ES2015 setup).
 - Copy over the *`main.js`* from your Challenge 1 solution or [http://bit.ly/2e6nKmu](http://bit.ly/2e6nKmu)
 - Break *`main.js`* down in 3 ES2015 modules, each module in a separated file:
-  - *`Location.js`*
+  - *`location.js`*
   - *`getCurrentWeather.js`*
   - *`main.js`*
 - When exporting/importing a single item:
@@ -497,173 +514,92 @@ console.log(`${myDog.name}: ${myDog.bark}`); // Sherlock: woof, woof!
 
 ---
 
-## Observer/Custom Event
+## Observer/Event
 
-- A *Subject* object maintains a list of interested *Observer* objects, automatically notifying them of its changes.
+- *Behavioral* pattern
+- Purpose: to reduce coupling between objects, when an object (*Subject*) maintains a list of other objects depending on it (*Observers*), automatically notifying them of any changes to state/behavior.
+- Pre-condition: a list of Observer objects interested in a specific Subject object.
+- Post-condition: the Subject will be able to notify its Observers all at once.
+
+----
+
+## Observer/Event
 
 <img src="img/observer.svg" class="diagram">
 
 ----
 
-## Observer/Custom Event
+## Observer/Event
+
+- Scenario: DOM click event
 
 ```javascript
-// subject.js
-var Subject = function() {
-  this.observers = [];
-};
+// Add Dog button is the Subject
+let addDogButton = document.getElementById('addDogButton');
 
-Subject.prototype.notify = function(message) {
-  this.observers.forEach(function(observer) {
-    observer.call(observer, message);
-  });
-};
+// Print Another Dog function is the Observer
+let printAnotherDog = e => {
+  let content = document.getElementById('content');
+  content.innerHTML += 'Sherlock: woof, woof!<br/>';
+}
 
-Subject.prototype.addObserver = function(observer) {
-  this.observers.push(observer);
-};
-
-module.exports = Subject;
+// Registering the Observer with the 'click' event of the subject
+addDogButton.addEventListener('click', printAnotherDog);
 ```
+
+<p class="center">[view on Plunker](http://plnkr.co/edit/8e3B9E?p=preview)</p>
 
 ----
 
-## Observer/Custom Event
+## Observer/Event
+
+- Scenario: DOM custom event
+- Any DOM element can trigger custom events:
 
 ```javascript
-var Subject = require('./subject');
-var ball = new Subject();
-var human = new Subject();
+// My Square is the Subject
+let mySquare = document.getElementById('mySquare');
 
-// register the animals (observers)
-var dog = function(message) {
-  if (message === 'ball') {
-    console.log('The dog ran after the ' + message);
-  }
-};
-ball.addObserver(dog); human.addObserver(dog);
+// Registering the Observer with the custom event of the Subject
+mySquare.addEventListener('move', moveMySquare);
 
-var cat = function(message) {
-  console.log('The cat looked and ignored the ' + message);
-};
-ball.addObserver(cat); human.addObserver(cat);
+// Dispatching the custom event on the Subject
+let customEvent = new Event('move');
+mySquare.dispatchEvent(customEvent);
 ```
+
+<p class="center">[view on Plunker](https://plnkr.co/edit/n7OPiG?p=preview)</p>
 
 ----
 
-## Observer/Custom Event
+## Observer/Event
+
+- Scenario: Object events
+- There are many implementations as [Node.js EventEmitter](https://nodejs.org/api/events.html), [jQuery Events](http://www.clock.co.uk/blog/use-jquery-events-on-plain-javascript-objects), [Backbone.Events](http://backbonejs.org/#Events)...
 
 ```javascript
-// throw a ball (subject)
-console.log('Throwing a ball...');
-ball.notify('ball');
-// The dog ran after the ball
-// The cat looked and ignored the ball
+// My Square is the Subject
+let mySquare = new MySquare('mySquare');
 
-// throw a human (subject)
-console.log('Throwing a human...');
-human.notify('human');
-// The cat looked and ignored the human
-```
-<p class="center">[source code subject.js](https://github.com/tiagorg/design-patterns-examples/blob/master/observer/subject.js)</p>
-<p class="center">[source code client.js](https://github.com/tiagorg/design-patterns-examples/blob/master/observer/client.js)</p>
+// Registering the Observer with the custom event of the Subject
+mySquare.on('move', moveMySquare);
 
-- Notifier is called -> all the observers will execute.
-- *Reduced coupling:* Observers and Subject can live without each other, but the Subject has references to the Observers.
-
----
-
-## Mediator/Pub-Sub
-
-- Exposes an unified interface through which the different parts of a system may communicate.
-- Observer can cause Garbage Collection issues: if removing a Subject, you must remember to remove all the Observer references from it.
-- A *Mediator* can completely decouple Subject and Observers by introducing a intermediate layer in between.
-
-----
-
-## Mediator/Pub-Sub
-
-<img src="img/mediator.svg" class="diagram">
-
-----
-
-## Mediator/Pub-Sub
-
-```javascript
-// mediator.js
-var channels = {};
-var subscribe = function(channel, subscriber) {
-  if (!channels[channel]) channels[channel] = [];
-  channels[channel].push(subscriber);
-};
-var publish = function(channel, message){
-  if (!channels[channel]) return;
-  channels[channel].forEach(function(subscriber) {
-    subscriber.call(subscriber, message);
-  });
-};
-
-module.exports = {
-  subscribe: subscribe,
-  publish: publish
-};
+// Dispatching the custom event on the Subject
+mySquare.emit('move', left, top);
 ```
 
-----
-
-## Mediator/Pub-Sub
-
-```javascript
-// pets.js
-var mediator = require('./mediator');
-
-// register the animals (subscribers to 'pets')
-var dog = function(message) {
-  if (message === 'ball') {
-    console.log('The dog ran after the ' + message);
-  }
-};
-mediator.subscribe('pets', dog);
-
-var cat = function(message) {
-  console.log('The cat looked and ignored the ' + message);
-};
-mediator.subscribe('pets', cat);
-```
+<p class="center">[view on Plunker](https://plnkr.co/edit/YNFCzo?p=preview)</p>
 
 ----
 
-## Mediator/Pub-Sub
+## Challenge 3
 
-``` javascript
-// client.js
-require('./pets');
-
-var mediator = require('./mediator');
-
-// throw a ball (publish to 'pets')
-console.log('Throwing a ball...');
-mediator.publish('pets', 'ball');
-// The dog ran after the ball
-// The cat looked and ignored the ball
-
-// throw a human (publish to 'pets')
-console.log('Throwing a human...');
-mediator.publish('pets', 'human');
-// The cat looked and ignored the human
-```
-<p class="center">[source code mediator.js](https://github.com/tiagorg/design-patterns-examples/blob/master/mediator/mediator.js)</p>
-<p class="center">[source code pets.js](https://github.com/tiagorg/design-patterns-examples/blob/master/mediator/pets.js)</p>
-<p class="center">[source code client.js](https://github.com/tiagorg/design-patterns-examples/blob/master/mediator/client.js)</p>
-
-----
-
-## Mediator/Pub-Sub
-
-- Same Observers, same event triggering.
-- The Mediator is required on both sides.
-- Observers and Subject hold no references to each other.
-- The Mediator is on top of the control. It is serving as a Pub-Sub infrastructure for those components.
+- Fork from your Challenge 2 ot [http://bit.ly/2eEKBF2](http://bit.ly/2eEKBF2).
+- We will replace the callback to *`Location.getCurrentWeather`* to an *Observer*:
+  - Modify *`Location`* to extend from *`EventEmitter`*
+  - Remove the callback from *`Location.getCurrentWeather`*
+  - Instead of passing *`printFn`*, write you own callback that will *`emit`* your custom event, passing along the *`response`* received.
+  - On *`main.js`*, register *`printToDOM`* as an observer for each instance of *`Location`*.
 
 ---
 

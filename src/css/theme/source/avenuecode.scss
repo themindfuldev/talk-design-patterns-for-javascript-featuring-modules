@@ -106,6 +106,10 @@ section.has-light-background {
       &.full {
         max-height: initial;
       }
+
+      &.diagram {
+        height: 800px;
+      }
     }
 
     .ac-column-logo {
